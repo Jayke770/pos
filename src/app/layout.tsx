@@ -1,8 +1,9 @@
 import "@/app/globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
+import { appConfig } from "@/lib/config";
 export const metadata: Metadata = {
-  title: "Terry&Perry Coffee ",
+  title: appConfig.appName,
   description: "Best Coffe",
 };
 
@@ -18,7 +19,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute={"class"}
-          defaultTheme="light"   >
+          defaultTheme="light">
           {children}
         </ThemeProvider>
       </body>
