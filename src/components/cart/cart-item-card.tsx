@@ -60,7 +60,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
               )}
               
               {item.notes && (
-                <p className="text-xs italic text-muted-foreground mt-1">"{item.notes}"</p>
+                <p className="text-xs italic text-muted-foreground mt-1">{`"${item.notes}"`}</p>
               )}
             </div>
           </div>

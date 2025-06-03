@@ -2,14 +2,12 @@
 
 import { usePOSStore } from '@/lib/store';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CartItemCard } from '@/components/cart/cart-item-card';
-import { CheckoutDialog } from '@/components/cart/checkout-dialog';
 import { useState } from 'react';
 import { ShoppingCart, PackageCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { useMedia } from 'react-use'
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '../ui/drawer';
 export function CartSection() {
