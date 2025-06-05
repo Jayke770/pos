@@ -2,8 +2,14 @@ import { DashboardPopularProducts } from "@/components/dashboard/popular-product
 import { DashboardRecentOrders } from "@/components/dashboard/recent-orders";
 import { DashboardSales } from "@/components/dashboard/sales";
 import { DashboardStats } from "@/components/dashboard/stats";
+import { AuthOptions } from "@/services/next-auth/auth";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+    const session = await getServerSession(AuthOptions)
+    if (!session?.user?.role) redirect("/api/auth/signout")
+    if (["admin", "owner"].includes(session?.user?.role)) redirect("/dashboard")
     return (
         <div className=" flex flex-col space-y-4 sm:space-y-6">
             <div className="bg-card rounded-lg p-4 sm:p-6">

@@ -40,7 +40,7 @@ export interface IApiResponse {
 }
 
 //hooks 
-export interface ICategories {
+export interface ICategory {
     id: string,
     category: string,
     totalProducts: number

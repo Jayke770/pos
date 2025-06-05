@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { NextAuthSessionProvider } from "@/components/context/session";
 import { getServerSession } from 'next-auth'
 import { AuthOptions } from "@/services/next-auth/auth";
+import { AppLoader } from "@/components/ui/loader";
 export const metadata: Metadata = {
   title: appConfig.appName,
   description: "Best Coffee",
@@ -17,7 +18,7 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
       <body className=" antialiased bg-muted/30">
         <ThemeProvider attribute={"class"} defaultTheme="system">
           <NextAuthSessionProvider session={session}>
-            {children}
+            {session ? children : <AppLoader />}
             <Toaster richColors className=" fasfasfs" />
           </NextAuthSessionProvider>
         </ThemeProvider>

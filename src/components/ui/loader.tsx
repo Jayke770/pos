@@ -1,8 +1,7 @@
 import { Loader2 } from "lucide-react";
-
-export function AppLoader({ className }: { className: string }) {
+export function AppLoader({ className }: { className?: string }) {
     return (
-        <div className={className}>
+        <div className={className || "p-4 h-screen w-screen flex justify-between items-center"}>
             <Loader2 className=" size-12 animate-spin " />
         </div>
     )

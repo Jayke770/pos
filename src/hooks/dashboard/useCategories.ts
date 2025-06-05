@@ -1,7 +1,7 @@
 import { fetcher } from "@/lib/utils";
-import { ICategories } from "@/types";
+import { ICategory } from "@/types";
 import useSWR from "swr";
-export default function useCategories(): { categories?: ICategories[]; categoriesLoading: boolean; categoriesError: boolean; mutate: () => void } {
+export default function useCategories(): { categories?: ICategory[]; categoriesLoading: boolean; categoriesError: boolean; mutate: () => void } {
     const { data, error, isLoading, mutate } = useSWR("/api/categories", fetcher,
         {
             shouldRetryOnError: true,
