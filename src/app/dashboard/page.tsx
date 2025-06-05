@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
     const session = await getServerSession(AuthOptions)
-    if (!session?.user?.role) redirect("/api/auth/signout")
+    if (!session) redirect("/api/auth/signout")
     if (!["admin", "owner"].includes(session?.user?.role)) redirect("/")
     return (
         <div className=" flex flex-col space-y-4 sm:space-y-6">
