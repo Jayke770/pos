@@ -1,7 +1,5 @@
 "use client"
-
 import { useState, useMemo } from "react"
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { ProductsStats } from "@/components/dashboard/products/stats"
 import { ProductFilters } from "@/components/dashboard/products/filters"
 import { ProductCard } from "@/components/dashboard/products/card"
@@ -10,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Download, Grid, List, Package } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// Sample products data
 const initialProducts = [
     {
         id: "PRD-001",
@@ -151,6 +148,7 @@ export default function ProductsPage() {
         return { totalProducts, totalValue, lowStockItems, avgMargin }
     }, [products])
 
+    // @typescript-eslint/no-explicit-any
     const handleAddProduct = (newProduct: any) => {
         setProducts([...products, newProduct])
     }

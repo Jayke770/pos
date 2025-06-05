@@ -9,7 +9,7 @@ export default function DashboardPage() {
             <div className="bg-card rounded-lg p-4 sm:p-6">
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
                 <p className="text-sm sm:text-base text-muted-foreground mt-1">
-                    Welcome back! Here's what's happening at your coffee shop today.
+                    {"Welcome back! Here's what's happening at your coffee shop today."}
                 </p>
             </div>
             <DashboardStats />

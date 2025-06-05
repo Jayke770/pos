@@ -5,7 +5,7 @@ import { AppLoader } from "@/components/ui/loader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import useCategories from "@/hooks/dashboard/useCategories";
 import { cn } from "@/lib/utils";
-import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { motion } from 'motion/react'
 export default function Categories() {
     const { categories, categoriesLoading } = useCategories()

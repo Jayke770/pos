@@ -1,12 +1,9 @@
 import { Categories } from "@/models/collections";
 import { dbConnect } from "@/models/dbConnect";
 import { AuthOptions } from "@/services/next-auth/auth";
-import { IApiResponse } from "@/types";
-import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from 'zod'
-const { NEXTAUTH_URL } = process.env
 const CreateCategorySchema = z.object({
     category: z.string()
 })
@@ -20,7 +17,7 @@ export async function POST(req: NextRequest) {
         await Categories.create({ category: newCategory.data.category })
         return NextResponse.json({ status: true, message: "New Category Saved!" })
     } catch (e) {
-        return NextResponse.json({ status: false, message: "Server Error" })
+        return NextResponse.json({ status: false, message: "Server Error", error: e })
     }
 }
 export async function GET() {

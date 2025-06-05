@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import { AuthJsMongodbAdapter } from "@/services/next-auth/mongodb-adapter"
 import { appConfig } from "@/lib/config"
+import { IUserRole } from "@/types"
 export const AuthOptions: NextAuthOptions = {
     providers: [
         Credentials({
@@ -29,11 +30,11 @@ export const AuthOptions: NextAuthOptions = {
     callbacks: {
         jwt({ token, user }) {
             //@ts-ignore
-            if (user) token.role = user?.role as any
+            if (user) token.role = user.role 
             return token
         },
         session({ session, token }) {
-            session.user.role = token.role
+            if (session?.user) session.user.role = token.role as IUserRole
             return session
         }
     },
