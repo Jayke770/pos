@@ -18,7 +18,7 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
       <body className=" antialiased bg-muted/30">
         <ThemeProvider attribute={"class"} defaultTheme="system">
           <NextAuthSessionProvider session={session}>
-            {session ? children : <AppLoader />}
+            {children}
             <Toaster richColors className=" fasfasfs" />
           </NextAuthSessionProvider>
         </ThemeProvider>
