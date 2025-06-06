@@ -1,21 +1,42 @@
 import { Categories } from "@/models/collections";
 import { dbConnect } from "@/models/dbConnect";
 import { AuthOptions } from "@/services/next-auth/auth";
+import { Types } from "mongoose";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from 'zod'
-const CreateCategorySchema = z.object({
-    category: z.string()
-})
+const CategorySchema = z.union([
+    z.object({
+        category: z.string(),
+        action: z.literal("create")
+    }),
+    z.object({
+        id: z.string(),
+        category: z.string(),
+        action: z.literal("update")
+    }),
+    z.object({
+        id: z.string(),
+        category: z.string(),
+        action: z.literal("delete")
+    })
+])
 export async function POST(req: NextRequest) {
     try {
-        const newCategory = CreateCategorySchema.safeParse(await req.json())
-        if (!newCategory.success) return NextResponse.json({ status: false, message: "Invalid Category" })
+        const categoryData = CategorySchema.safeParse(await req.json())
+        if (!categoryData.success) return NextResponse.json({ status: false, message: "Invalid Category" })
         const session = await getServerSession(AuthOptions);
         if (!session || (session && !["admin", "owner"].includes(session?.user?.role))) return NextResponse.json({ status: false, message: "Invalid User!" })
         await dbConnect()
-        await Categories.create({ category: newCategory.data.category })
-        return NextResponse.json({ status: true, message: "New Category Saved!" })
+        if (categoryData.data.action === "create") {
+            await Categories.create({ category: categoryData.data.category })
+            return NextResponse.json({ status: true, message: "New Category Saved!" })
+        }
+        if (categoryData.data.action === "update") {
+            await Categories.updateOne({ _id: new Types.ObjectId(categoryData.data.id) }, { $set: { category: categoryData.data.category } })
+            return NextResponse.json({ status: true, message: "Category Updated!" })
+        }
+        return NextResponse.json({ status: false, message: "Invalid Action" })
     } catch (e) {
         return NextResponse.json({ status: false, message: "Server Error", error: e })
     }

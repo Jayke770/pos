@@ -118,15 +118,15 @@ export function EditCategory() {
         onToggleIsSubmitting()
         toast.promise(new Promise<string>(async (resolve, reject) => {
             try {
-                const response = await axios.patch("/api/categories", { ...data, id: state?.category?.id })
-                if (response?.status !== 200) reject("Failed to save category")
+                const response = await axios.patch("/api/categories", { ...data, id: state?.category?.id, action: "update" })
+                if (response?.status !== 200) reject("Failed to update category")
                 const result = response.data as IApiResponse
                 result?.status ? resolve(result.message) : reject(result.message)
             } catch (e) {
                 reject("Something went wrong")
             }
         }), {
-            loading: "Saving...",
+            loading: "Updating...",
             error: e => e,
             success: e => e,
             onAutoClose: () => {
@@ -193,7 +193,7 @@ export function DeleteCategory() {
         onToggleIsSubmitting()
         toast.promise(new Promise<string>(async (resolve, reject) => {
             try {
-                const response = await axios.patch("/api/categories", { id: state?.category?.id })
+                const response = await axios.patch("/api/categories", { id: state?.category?.id, action: "delete" })
                 if (response?.status !== 200) reject("Failed to save category")
                 const result = response.data as IApiResponse
                 result?.status ? resolve(result.message) : reject(result.message)
