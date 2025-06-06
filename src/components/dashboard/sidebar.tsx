@@ -1,7 +1,6 @@
 "use client"
 
 import { Coffee, BarChart3, ShoppingCart, Users, Package, Settings, TrendingUp, FileText, ListOrdered } from "lucide-react"
-
 import {
     Sidebar,
     SidebarContent,
@@ -13,11 +12,12 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    SidebarRail,
+    useSidebar,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useCallback } from "react"
 const menuItems = [
     {
         title: "Dashboard",
@@ -68,6 +68,8 @@ const menuItems = [
 
 export function AppSidebar() {
     const pathname = usePathname()
+    const { setOpenMobile } = useSidebar()
+    const onSetMobile = useCallback(() => setOpenMobile(false), [setOpenMobile])
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
@@ -87,7 +89,7 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarContent>
+            <SidebarContent className=" bg-sidebar">
                 <SidebarGroup>
                     <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
                     <SidebarGroupContent>
@@ -95,6 +97,7 @@ export function AppSidebar() {
                             {menuItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
+                                        onClick={onSetMobile}
                                         isActive={pathname === item.url}
                                         asChild
                                         tooltip={item.title}>
@@ -127,7 +130,6 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
-            <SidebarRail />
         </Sidebar>
     )
 }
