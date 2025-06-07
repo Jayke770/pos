@@ -19,7 +19,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 const AddNewCategorySchema = z.object({
     category: z.string().min(3, { message: "Category name is required" })
 })
-export function AddCategory() {
+export function AddCategory({ updateCategories }: { updateCategories: () => void }) {
     const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
     const onToggleIsSubmitting = useCallback(() => setIsSubmittingForm(e => !e), [isSubmittingForm])
     const addForm = useForm<z.infer<typeof AddNewCategorySchema>>({
@@ -46,6 +46,7 @@ export function AddCategory() {
             onAutoClose: () => {
                 onToggleIsSubmitting()
                 addForm.reset()
+                updateCategories()
             }
         })
     }
@@ -104,7 +105,7 @@ export function AddCategory() {
         </Dialog>
     )
 }
-export function EditCategory() {
+export function EditCategory({ updateCategories }: { updateCategories: () => void }) {
     const state = useCategoryState(useShallow(state => state))
     const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
     const onToggleIsSubmitting = useCallback(() => setIsSubmittingForm(e => !e), [isSubmittingForm])
@@ -132,6 +133,8 @@ export function EditCategory() {
             onAutoClose: () => {
                 onToggleIsSubmitting()
                 editForm.reset()
+                updateCategories()
+                state.onUpdateCategory({ action: undefined })
             }
         })
     }
@@ -185,7 +188,7 @@ export function EditCategory() {
         </Dialog>
     )
 }
-export function DeleteCategory() {
+export function DeleteCategory({ updateCategories }: { updateCategories: () => void }) {
     const state = useCategoryState(useShallow(state => state))
     const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
     const onToggleIsSubmitting = useCallback(() => setIsSubmittingForm(e => !e), [isSubmittingForm])
@@ -206,6 +209,8 @@ export function DeleteCategory() {
             success: e => e,
             onAutoClose: () => {
                 onToggleIsSubmitting()
+                updateCategories()
+                state.onUpdateCategory({ action: undefined })
             }
         })
     }
@@ -259,4 +264,4 @@ export function DeleteCategory() {
             </DialogContent>
         </Dialog>
     )
-}
+} 

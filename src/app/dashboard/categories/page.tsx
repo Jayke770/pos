@@ -13,7 +13,7 @@ import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 export default function Categories() {
     const state = useCategoryState(useShallow(state => state))
-    const { categories, categoriesLoading } = useCategories() 
+    const { mutate: updateCategory, categories, categoriesLoading } = useCategories() 
     const onToggleCategoryModal = useCallback((action: "edit" | "delete", category: ICategory) => state.onUpdateCategory({ action, category }), [state.onUpdateCategory])
     return (    
         <>
@@ -75,8 +75,8 @@ export default function Categories() {
                     </Table>
                 </div>
             </div>
-            <EditCategory />
-            <DeleteCategory />
+            <EditCategory updateCategories={updateCategory} />
+            <DeleteCategory updateCategories={updateCategory} />
         </>
     )
 }
