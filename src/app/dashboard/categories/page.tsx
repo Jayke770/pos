@@ -13,9 +13,9 @@ import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 export default function Categories() {
     const state = useCategoryState(useShallow(state => state))
-    const { mutate: updateCategory, categories, categoriesLoading } = useCategories() 
+    const { mutate: updateCategory, categories, categoriesLoading } = useCategories()
     const onToggleCategoryModal = useCallback((action: "edit" | "delete", category: ICategory) => state.onUpdateCategory({ action, category }), [state.onUpdateCategory])
-    return (    
+    return (
         <>
             <div className="space-y-4 sm:space-y-6">
                 {/* Header */}
@@ -28,7 +28,7 @@ export default function Categories() {
                             </p>
                         </div>
                         <div className="flex gap-2">
-                            <AddCategory />
+                            <AddCategory updateCategories={updateCategory} />
                         </div>
                     </div>
                 </div>
