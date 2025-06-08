@@ -1,4 +1,4 @@
-import { Categories } from "@/models/collections";
+import { Categories, Products } from "@/models/collections";
 import { dbConnect } from "@/models/dbConnect";
 import { AuthOptions } from "@/services/next-auth/auth";
 import { Types } from "mongoose";
@@ -17,7 +17,6 @@ const CategorySchema = z.union([
     }),
     z.object({
         id: z.string(),
-        category: z.string(),
         action: z.literal("delete")
     })
 ])
@@ -35,6 +34,12 @@ export async function POST(req: NextRequest) {
         if (categoryData.data.action === "update") {
             await Categories.updateOne({ _id: new Types.ObjectId(categoryData.data.id) }, { $set: { category: categoryData.data.category } })
             return NextResponse.json({ status: true, message: "Category Updated!" })
+        }
+        if (categoryData.data.action === "delete") {
+            const hasProduct = await Products.findOne({ categoryId: new Types.ObjectId(categoryData.data.id) })
+            if (hasProduct) return NextResponse.json({ status: false, message: "Cannot delete category with existing products." })
+            await Categories.deleteOne({ _id: new Types.ObjectId(categoryData.data.id) })
+            return NextResponse.json({ status: true, message: "Category Deleted!" })
         }
         return NextResponse.json({ status: false, message: "Invalid Action" })
     } catch (e) {

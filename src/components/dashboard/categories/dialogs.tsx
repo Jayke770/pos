@@ -32,7 +32,7 @@ export function AddCategory({ updateCategories }: { updateCategories: () => void
         onToggleIsSubmitting()
         toast.promise(new Promise<string>(async (resolve, reject) => {
             try {
-                const response = await axios.post("/api/categories", data)
+                const response = await axios.post("/api/categories", { ...data, action: "create" })
                 if (response?.status !== 200) reject("Failed to save category")
                 const result = response.data as IApiResponse
                 result?.status ? resolve(result.message) : reject(result.message)
@@ -42,11 +42,13 @@ export function AddCategory({ updateCategories }: { updateCategories: () => void
         }), {
             loading: "Saving...",
             error: e => e,
-            success: e => e,
+            success: e => {
+                updateCategories()
+                return e
+            },
             onAutoClose: () => {
                 onToggleIsSubmitting()
                 addForm.reset()
-                updateCategories()
             }
         })
     }
@@ -129,11 +131,13 @@ export function EditCategory({ updateCategories }: { updateCategories: () => voi
         }), {
             loading: "Updating...",
             error: e => e,
-            success: e => e,
+            success: e => {
+                updateCategories()
+                return e
+            },
             onAutoClose: () => {
                 onToggleIsSubmitting()
                 editForm.reset()
-                updateCategories()
                 state.onUpdateCategory({ action: undefined })
             }
         })
@@ -206,10 +210,12 @@ export function DeleteCategory({ updateCategories }: { updateCategories: () => v
         }), {
             loading: "Saving...",
             error: e => e,
-            success: e => e,
+            success: e => {
+                updateCategories()
+                return e
+            },
             onAutoClose: () => {
                 onToggleIsSubmitting()
-                updateCategories()
                 state.onUpdateCategory({ action: undefined })
             }
         })
