@@ -9,6 +9,15 @@ export interface IUserModel {
     username: string,
     password: string
 }
+export interface IInventoryModel {
+    currentStock: number,
+    description?: string
+    lowStockThreshold: number
+    maxStock: number
+    name: string
+    type: string
+    unit: string
+}
 export interface IProductCategoryModel {
     category: string,
     productIds: Types.ObjectId[],
@@ -45,5 +54,6 @@ export interface ICategory {
     category: string,
     totalProducts: number
 }
+export interface IInventory extends IInventoryModel { }
 
 

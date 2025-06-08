@@ -1,4 +1,4 @@
-import { IProductCategoryModel, IProductModel } from "@/types";
+import { IInventoryModel, IProductCategoryModel, IProductModel } from "@/types";
 import { Schema, model, models, deleteModel, Types, Document } from "mongoose";
 
 const CategorySchame = new Schema<IProductCategoryModel>({
@@ -17,4 +17,15 @@ const ProductSchema = new Schema<IProductModel>({
 }, {
     timestamps: true
 })
-export const Products = model("products", ProductSchema, "products", { overwriteModels: true })
+export const Products = model("products", ProductSchema, "products", { overwriteModels: true }) 
+
+const InventorySchema = new Schema<IInventoryModel>({
+    currentStock: { type: Number, required: true },
+    description: { type: String },
+    lowStockThreshold: { type: Number, required: true },
+    maxStock: { type: Number, required: true },
+    name: { type: String, required: true },
+    type: { type: String, required: true },
+    unit: { type: String, required: true }
+}, { timestamps: true })
+export const Inventory = model("inventory", InventorySchema, "inventory", { overwriteModels: true }) 
