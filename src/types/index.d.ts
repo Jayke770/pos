@@ -54,6 +54,8 @@ export interface ICategory {
     category: string,
     totalProducts: number
 }
-export interface IInventory extends IInventoryModel { }
+export interface IInventory extends IInventoryModel {
+    id: string
+}
 
 
