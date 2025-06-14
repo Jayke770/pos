@@ -29,7 +29,7 @@ export default function MainPage() {
   const onToggleIsSubmitting = useCallback(() => setIsSubmittingForm(e => !e), [isSubmittingForm])
   const onLogin = async (data: z.infer<typeof LoginFormSchema>) => {
     onToggleIsSubmitting()
-    toast.promise(signIn("credentials", { callbackUrl: "/home", ...data }), {
+    toast.promise(signIn("credentials", { callbackUrl: "/redirect", ...data }), {
       loading: "Please wait...",
       error: "Error",
       success: "Redirecting...."
