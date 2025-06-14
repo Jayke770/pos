@@ -1,6 +1,7 @@
 import { Inventory } from "@/models/collections";
 import { dbConnect } from "@/models/dbConnect";
 import { AuthOptions } from "@/services/next-auth/auth";
+import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -9,8 +10,9 @@ const InventorySchema = z.union([
         currentStock: z.number(),
         description: z.string().optional(),
         lowStockThreshold: z.number(),
-        maxStock: z.number(),
+        contentPerUnit: z.number(),
         name: z.string(),
+        expiryDate: z.string(),
         type: z.string(),
         unit: z.string(),
         action: z.literal("create")
@@ -34,12 +36,12 @@ const InventorySchema = z.union([
 export async function POST(req: NextRequest) {
     try {
         const inventoryData = InventorySchema.safeParse(await req.json())
-        if (!inventoryData.success) return NextResponse.json({ status: false, message: "Invalid Inventory!" })
+        if (!inventoryData.success) return NextResponse.json({ status: false, message: "Invalid Inventory!", error: inventoryData.error })
         const session = await getServerSession(AuthOptions);
         if (!session || (session && !["admin", "owner"].includes(session?.user?.role))) return NextResponse.json({ status: false, message: "Invalid User!" })
         await dbConnect()
         if (inventoryData.data.action === "create") {
-            await Inventory.create(inventoryData.data)
+            await Inventory.insertOne({ ...inventoryData.data, expiryDate: new Date(inventoryData.data.expiryDate) })
             return NextResponse.json({ status: true, message: "New Inventory Saved!" })
         }
         return NextResponse.json({ status: false, message: "Invalid Action" })

@@ -10,30 +10,18 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, Package, Coffee, Milk, Droplets, Cake, Sandwich, Cookie, Leaf, Sparkles } from "lucide-react"
+import { Plus, Package, Coffee, Milk, Droplets, Cake, Sandwich, Cookie, Leaf, Sparkles, CalendarIcon } from "lucide-react"
 import { itemTypes } from "@/lib/config"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import axios from "axios"
 import { toast } from "sonner"
 import { IApiResponse } from "@/types"
-// Inventory categories with icons
-const inventoryCategories = [
-    { id: "coffee", name: "Coffee", icon: Coffee, type: "ingredient" },
-    { id: "tea", name: "Tea", icon: Leaf, type: "ingredient" },
-    { id: "dairy", name: "Dairy", icon: Milk, type: "ingredient" },
-    { id: "syrups", name: "Syrups", icon: Droplets, type: "ingredient" },
-    { id: "sweeteners", name: "Sweeteners", icon: Sparkles, type: "ingredient" },
-    { id: "spices", name: "Spices", icon: Sparkles, type: "ingredient" },
-    { id: "pastries", name: "Pastries", icon: Cake, type: "food" },
-    { id: "bread", name: "Bread", icon: Sandwich, type: "ingredient" },
-    { id: "snacks", name: "Snacks", icon: Cookie, type: "food" },
-    { id: "supplies", name: "Supplies", icon: Package, type: "packaging" },
-]
-
-// Item types
-
+import { Popover, PopoverContent } from "@/components/ui/popover"
+import { PopoverTrigger } from "@radix-ui/react-popover"
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
 
 // Common units
 const commonUnits = [
@@ -76,25 +64,21 @@ const inventorySchema = z.object({
     type: z.string().min(1, "Type is required"),
     description: z.string().optional(),
     unit: z.string().min(1, "Unit is required"),
+    expiryDate: z.date({ message: "Expiry Date is required" }),
+    contentPerUnit: z
+        .number()
+        .min(1, "Current Content  must be greater than 0"),
     currentStock: z
         .number()
-        .min(1, "Current stock cannot be negative"),
-    maxStock: z
-        .number()
-        .gt(1, "Maximum stock must be greater than 0"),
+        .min(1, "Current stock  must be greater than 0"),
     lowStockThreshold: z
         .number()
         .gt(0, "Low stock threshold must be greater than 0"),
 })
-
 type InventoryFormData = z.infer<typeof inventorySchema>
-
-
-
 export function AddInventoryDialog() {
     const [open, setOpen] = useState(false)
     const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
-    // Initialize form with React Hook Form
     const newInventoryForm = useForm({
         resolver: zodResolver(inventorySchema),
         defaultValues: {
@@ -124,8 +108,7 @@ export function AddInventoryDialog() {
                 return e
             },
             onAutoClose: () => {
-                onToggleIsSubmitting
-                // state.onUpdateCategory({ action: undefined })
+                onToggleIsSubmitting()
             }
         })
     }
@@ -210,94 +193,109 @@ export function AddInventoryDialog() {
                                 </FormItem>
                             )}
                         />
-
-                        {/* Unit and Current Stock */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                            <FormField
-                                control={newInventoryForm.control}
-                                name="currentStock"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Current Stock *</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="number"
-                                                min="0"
-                                                {...field}
-                                                onChange={e => field.onChange(Number(e.target.value || 0))} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={newInventoryForm.control}
-                                name="unit"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Unit</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                        <FormField
+                            control={newInventoryForm.control}
+                            name="expiryDate"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Expiry Date</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
                                             <FormControl>
-                                                <SelectTrigger className=" w-full">
-                                                    <SelectValue placeholder="Select unit" />
-                                                </SelectTrigger>
+                                                <Button
+                                                    variant={"outline"}>
+                                                    {field.value ? format(field.value, "PPP") : <span>Pick an expiry date</span>}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
                                             </FormControl>
-                                            <SelectContent>
-                                                {commonUnits.map((unit) => (
-                                                    <SelectItem key={unit} value={unit}>
-                                                        {unit}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                        </PopoverTrigger>
+                                        <PopoverContent align="start" className=" w-auto border-none shadow-none p-0">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                className="rounded-md border shadow-sm"
+                                                captionLayout="dropdown" />
+                                        </PopoverContent>
+                                    </Popover>
+                                </FormItem>
+                            )} />
+                        {/* Unit and Current Stock */}
 
-
-                        </div>
-
-                        {/* Max Stock and Low Stock Alert */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField
-                                control={newInventoryForm.control}
-                                name="maxStock"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Maximum Stock</FormLabel>
+                        <FormField
+                            control={newInventoryForm.control}
+                            name="unit"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Unit</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                         <FormControl>
-                                            <Input
-                                                type="number"
-                                                min="1"
-                                                {...field}
-                                                onChange={e => field.onChange(Number(e.target.value || 0))}
-                                            />
+                                            <SelectTrigger className=" w-full">
+                                                <SelectValue placeholder="Select unit" />
+                                            </SelectTrigger>
                                         </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={newInventoryForm.control}
-                                name="lowStockThreshold"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Low Stock Alert</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="number"
-                                                min="1"
-                                                {...field}
-                                                onChange={e => field.onChange(Number(e.target.value || 0))}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                                        <SelectContent>
+                                            {commonUnits.map((unit) => (
+                                                <SelectItem key={unit} value={unit}>
+                                                    {unit}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={newInventoryForm.control}
+                            name="contentPerUnit"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Content Per Unit</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            onChange={e => field.onChange(Number(e.target.value || 0))}
+                                            placeholder="e.g. 100"
+                                            inputMode="decimal" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={newInventoryForm.control}
+                            name="currentStock"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Current Stock</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            inputMode="decimal"
+                                            {...field}
+                                            onChange={e => field.onChange(Number(e.target.value || 0))} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={newInventoryForm.control}
+                            name="lowStockThreshold"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Low Stock Alert</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            inputMode="decimal"
+                                            {...field}
+                                            onChange={e => field.onChange(Number(e.target.value || 0))}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <div className="flex gap-2 pt-4 border-t">
                             <Button type="submit" className="flex-1" disabled={!newInventoryForm.formState.isValid}>

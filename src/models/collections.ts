@@ -1,4 +1,4 @@
-import { IInventoryModel, IProductCategoryModel, IProductModel } from "@/types";
+import { IDashboardStatsModel, IInventoryModel, IProductCategoryModel, IProductModel } from "@/types";
 import { Schema, model, models, deleteModel, Types, Document } from "mongoose";
 
 const CategorySchame = new Schema<IProductCategoryModel>({
@@ -23,9 +23,17 @@ const InventorySchema = new Schema<IInventoryModel>({
     currentStock: { type: Number, required: true },
     description: { type: String },
     lowStockThreshold: { type: Number, required: true },
-    maxStock: { type: Number, required: true },
     name: { type: String, required: true },
     type: { type: String, required: true },
-    unit: { type: String, required: true }
+    unit: { type: String, required: true },
+    expiryDate: {}
+}, { timestamps: true, overwriteModels: true, })
+export const Inventory = model("inventory", InventorySchema, "inventory", { overwriteModels: true })
+
+const DashboardSchema = new Schema<IDashboardStatsModel>({
+    ingredients: { type: Number },
+    inventory: { type: Number },
+    lowStock: { type: Number },
+    outOfStock: { type: Number }
 }, { timestamps: true })
-export const Inventory = model("inventory", InventorySchema, "inventory", { overwriteModels: true }) 
+export const Dashboard = model("dashboard", DashboardSchema, "dashboard", { overwriteModels: true })   

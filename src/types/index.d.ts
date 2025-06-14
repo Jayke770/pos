@@ -13,10 +13,19 @@ export interface IInventoryModel {
     currentStock: number,
     description?: string
     lowStockThreshold: number
-    maxStock: number
     name: string
     type: string
-    unit: string
+    unit: string,
+    expiryDate: Date
+}
+export interface IDashboardStatsModel {
+    inventory: number
+    ingredients: number
+    pakaging: number
+    lowStock: number
+    outOfStock: number
+    updatedAt?: Date,
+    createdAt?: Date
 }
 export interface IProductCategoryModel {
     category: string,
