@@ -14,7 +14,7 @@ import { useShallow } from "zustand/react/shallow";
 export default function Categories() {
     const state = useCategoryState(useShallow(state => state))
     const { mutate: updateCategory, categories, categoriesLoading } = useCategories()
-    const onToggleCategoryModal = useCallback((action: "edit" | "delete", category: ICategory) => state.onUpdateCategory({ action, category }), [state.onUpdateCategory])
+    const onToggleCategoryModal = useCallback((action: "edit" | "delete", category: ICategory) => state.onUpdateCategory({ action, category }), [state])
     return (
         <>
             <div className="space-y-4 sm:space-y-6">

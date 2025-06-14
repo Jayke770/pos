@@ -1,13 +1,12 @@
 import { Inventory } from "@/models/collections";
 import { dbConnect } from "@/models/dbConnect";
 import { AuthOptions } from "@/services/next-auth/auth";
-import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 const InventorySchema = z.union([
     z.object({
-        currentStock: z.number(),
+        stocks: z.number(),
         description: z.string().optional(),
         lowStockThreshold: z.number(),
         contentPerUnit: z.number(),
@@ -18,7 +17,7 @@ const InventorySchema = z.union([
         action: z.literal("create")
     }),
     z.object({
-        currentStock: z.number(),
+        stock: z.number(),
         description: z.string().optional(),
         lowStockThreshold: z.number(),
         maxStock: z.number(),
@@ -34,20 +33,16 @@ const InventorySchema = z.union([
     })
 ]);
 export async function POST(req: NextRequest) {
-    try {
-        const inventoryData = InventorySchema.safeParse(await req.json())
-        if (!inventoryData.success) return NextResponse.json({ status: false, message: "Invalid Inventory!", error: inventoryData.error })
-        const session = await getServerSession(AuthOptions);
-        if (!session || (session && !["admin", "owner"].includes(session?.user?.role))) return NextResponse.json({ status: false, message: "Invalid User!" })
-        await dbConnect()
-        if (inventoryData.data.action === "create") {
-            await Inventory.insertOne({ ...inventoryData.data, expiryDate: new Date(inventoryData.data.expiryDate) })
-            return NextResponse.json({ status: true, message: "New Inventory Saved!" })
-        }
-        return NextResponse.json({ status: false, message: "Invalid Action" })
-    } catch (e) {
-        return NextResponse.json({ status: false, message: "Server Error", error: e })
+    const inventoryData = InventorySchema.safeParse(await req.json())
+    if (!inventoryData.success) return NextResponse.json({ status: false, message: "Invalid Inventory!", error: inventoryData.error })
+    const session = await getServerSession(AuthOptions);
+    if (!session || (session && !["admin", "owner"].includes(session?.user?.role))) return NextResponse.json({ status: false, message: "Invalid User!" })
+    await dbConnect()
+    if (inventoryData.data.action === "create") {
+        await Inventory.insertOne({ ...inventoryData.data, expiryDate: new Date(inventoryData.data.expiryDate) })
+        return NextResponse.json({ status: true, message: "New Inventory Saved!" })
     }
+    return NextResponse.json({ status: false, message: "Invalid Action" })
 }
 
 export async function GET() {
@@ -56,7 +51,16 @@ export async function GET() {
         if (!session) return NextResponse.json({ status: false, message: "Invalid User!" })
         await dbConnect()
         const categories = await Inventory.find({}, {
-            id: "$_id", _id: 0, currentStock: 1, description: 1, lowStockThreshold: 1, maxStock: 1, type: 1, name: 1, unit: 1
+            id: "$_id",
+            _id: 0,
+            stocks: 1,
+            description: 1,
+            lowStockThreshold: 1,
+            stockUsed: 1,
+            type: 1,
+            name: 1,
+            unit: 1,
+            expiryDate: 1
         }, { sort: { _id: -1 } }).lean()
         return NextResponse.json(categories)
     } catch (e) {

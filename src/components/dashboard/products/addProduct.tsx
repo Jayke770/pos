@@ -15,14 +15,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Plus, Trash2, Coffee, Package, AlertCircle, CheckCircle, Search, ChevronsUpDown, Check } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { ResponsiveComboBox } from "@/components/ui/responsive-combobox"
 import useCategories from "@/hooks/dashboard/useCategories"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { useAddProduct } from "@/hooks/dashboard/useAddProduct"
 import { useShallow } from "zustand/react/shallow"
-import { useDebounce } from "react-use";
 // Mock data for UI demonstration
 const mockCategories = [
     { id: "cat_coffee", category: "Coffee" },
@@ -279,7 +277,7 @@ export function AddProductDialog({ onAddProduct }: AddProductDialogProps) {
                                                             <Check
                                                                 className={cn(
                                                                     "ml-auto",
-                                                                    category.id === field.value.id
+                                                                    category.id === field.value?.id
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}

@@ -10,8 +10,9 @@ export interface IUserModel {
     password: string
 }
 export interface IInventoryModel {
-    currentStock: number,
-    description?: string
+    stocks: number,
+    stockUsed: number,
+    description?: string,
     lowStockThreshold: number
     name: string
     type: string

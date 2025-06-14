@@ -53,7 +53,7 @@ export async function GET() {
         await dbConnect()
         const categories = await Categories.find({}, { id: "$_id", category: 1, _id: 0 }, { sort: { _id: -1 } }).lean()
         return NextResponse.json(categories)
-    } catch (e) {
+    } catch (_) {
         return NextResponse.json([])
     }
 }

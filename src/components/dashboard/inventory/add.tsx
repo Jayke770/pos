@@ -1,5 +1,4 @@
 "use client"
-
 import { useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -41,23 +40,6 @@ const commonUnits = [
     "lbs",
 ]
 
-// Mock suppliers
-const suppliers = [
-    "Bean Co.",
-    "Tea Masters",
-    "Fresh Dairy",
-    "Plant Milk Co.",
-    "Flavor House",
-    "Sweet Supply",
-    "Local Honey",
-    "Spice World",
-    "Pack Pro",
-    "Bakery Fresh",
-    "Supply Central",
-    "Eco Packaging",
-    "Premium Foods",
-]
-
 // Zod validation schema
 const inventorySchema = z.object({
     name: z.string().min(1, "Item name is required"),
@@ -68,7 +50,7 @@ const inventorySchema = z.object({
     contentPerUnit: z
         .number()
         .min(1, "Current Content  must be greater than 0"),
-    currentStock: z
+    stocks: z
         .number()
         .min(1, "Current stock  must be greater than 0"),
     lowStockThreshold: z
@@ -105,10 +87,11 @@ export function AddInventoryDialog() {
             loading: "Saving...",
             error: e => e,
             success: e => {
+                newInventoryForm.reset()
                 return e
             },
             onAutoClose: () => {
-                onToggleIsSubmitting()
+                onToggleIsSubmitting() 
             }
         })
     }
@@ -213,7 +196,9 @@ export function AddInventoryDialog() {
                                             <Calendar
                                                 mode="single"
                                                 selected={field.value}
-                                                onSelect={field.onChange}
+                                                onSelect={field.onChange} 
+                                                startMonth={new Date(new Date().getFullYear(), new Date().getMonth())}
+                                                endMonth={new Date(new Date().getFullYear() + 100, 12)}
                                                 className="rounded-md border shadow-sm"
                                                 captionLayout="dropdown" />
                                         </PopoverContent>
@@ -265,10 +250,10 @@ export function AddInventoryDialog() {
                         />
                         <FormField
                             control={newInventoryForm.control}
-                            name="currentStock"
+                            name="stocks"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Current Stock</FormLabel>
+                                    <FormLabel>Stock</FormLabel>
                                     <FormControl>
                                         <Input
                                             inputMode="decimal"
