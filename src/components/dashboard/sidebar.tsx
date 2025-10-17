@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback } from "react"
+import { appConfig } from "@/lib/config"
 const menuItems = [
     {
         title: "Dashboard",
@@ -81,7 +82,7 @@ export function AppSidebar() {
                                     <Coffee className="size-4" />
                                 </div>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">Terry&Perry</span>
+                                    <span className="truncate font-semibold">{appConfig.appName}</span>
                                     <span className="truncate text-xs">Coffee Shop</span>
                                 </div>
                             </a>

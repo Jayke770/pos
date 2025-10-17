@@ -1,5 +1,5 @@
 export const appConfig = {
-    appName: "Terry&Perry"
+    appName: "Freetoh"
 } 
 
 export const itemTypes = [

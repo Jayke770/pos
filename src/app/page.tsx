@@ -13,6 +13,7 @@ import Image from 'next/image'
 import { useCallback, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { appConfig } from "@/lib/config";
 const LoginFormSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }),
   password: z.string().min(1, { message: "Password is required" })
@@ -37,18 +38,18 @@ export default function MainPage() {
   }
   return (
     <main className=" h-dvh w-dvw flex justify-center-safe items-center-safe p-4">
-      <Card className=" w-full max-w-sm border-none">
+      <Card className=" w-full max-w-sm">
         <CardHeader>
           <div className="flex justify-center items-center py-4">
             <Image
-              src={"/logo.jpg"}
+              src={"/logo.png"}
               priority
               width={500}
               height={500}
               alt="logo"
               className=" rounded-full size-40" />
           </div>
-          <CardTitle className=" text-xl text-center">Terry&Perry</CardTitle>
+          <CardTitle className=" text-xl text-center">{appConfig.appName}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...loginForm}>

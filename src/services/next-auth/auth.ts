@@ -20,7 +20,8 @@ export const AuthOptions: NextAuthOptions = {
                         image: null,
                         role: "admin"
                     }
-                }
+                } 
+
                 return null
             },
         })
@@ -29,7 +30,6 @@ export const AuthOptions: NextAuthOptions = {
     session: { strategy: "jwt" },
     callbacks: {
         jwt({ token, user }) {
-            //@ts-ignore
             if (user) token.role = user.role 
             return token
         },
