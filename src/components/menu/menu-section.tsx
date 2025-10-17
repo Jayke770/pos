@@ -1,31 +1,34 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { ProductCard } from '@/components/menu/product-card';
-import { CategoryFilter } from '@/components/menu/category-filter';
-import { categories, products } from '@/lib/data';
-import { usePOSStore } from '@/lib/store';
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CategoryFilter } from "@/components/menu/category-filter";
+import { ProductCard } from "@/components/menu/product-card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { categories, products } from "@/lib/data";
+import { usePOSStore } from "@/lib/store";
 
 export function MenuSection() {
   const { activeCategory, setActiveCategory } = usePOSStore();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
 
   useEffect(() => {
     let result = products;
 
     if (activeCategory) {
-      result = result.filter(product => product.categoryId === activeCategory);
+      result = result.filter(
+        (product) => product.categoryId === activeCategory,
+      );
     }
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      result = result.filter(product =>
-        product.name.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query)
+      result = result.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query),
       );
     }
 
@@ -61,8 +64,9 @@ export function MenuSection() {
             <div className="col-span-full flex flex-col items-center justify-center h-[50vh] text-center">
               <p className="text-muted-foreground">No products found</p>
               <button
+                type="button"
                 onClick={() => {
-                  setSearchQuery('');
+                  setSearchQuery("");
                   setActiveCategory(null);
                 }}
                 className="text-primary text-sm underline mt-2"

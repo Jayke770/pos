@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 interface TopSellingItem {
   id: string;
@@ -15,14 +15,14 @@ interface TopSellingItemsProps {
 
 export function TopSellingItems({ items }: TopSellingItemsProps) {
   const CHART_COLORS = [
-    'hsl(var(--chart-1))',
-    'hsl(var(--chart-2))',
-    'hsl(var(--chart-3))',
-    'hsl(var(--chart-4))',
-    'hsl(var(--chart-5))'
+    "hsl(var(--chart-1))",
+    "hsl(var(--chart-2))",
+    "hsl(var(--chart-3))",
+    "hsl(var(--chart-4))",
+    "hsl(var(--chart-5))",
   ];
-  
-  const data = items.map((item, index) => ({
+
+  const data = items.map((item, _index) => ({
     name: item.name,
     value: item.quantity,
     revenue: item.revenue,
@@ -41,13 +41,15 @@ export function TopSellingItems({ items }: TopSellingItemsProps) {
               outerRadius={80}
               paddingAngle={2}
               dataKey="value"
-              label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+              label={({ name, percent }) =>
+                `${name} (${(percent * 100).toFixed(0)}%)`
+              }
               labelLine={false}
             >
-              {data.map((entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={CHART_COLORS[index % CHART_COLORS.length]} 
+              {data.map((_entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={CHART_COLORS[index % CHART_COLORS.length]}
                 />
               ))}
             </Pie>

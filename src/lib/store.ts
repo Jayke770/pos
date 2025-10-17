@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { CartItem, Order, PaymentMethod, Product, ProductCustomization, ProductOption } from '@/lib/types';
-import { products } from '@/lib/data';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { products } from "@/lib/data";
+import type { CartItem, Order, PaymentMethod, Product } from "@/lib/types";
 
 interface POSState {
   cart: CartItem[];
@@ -12,17 +12,30 @@ interface POSState {
   recentOrders: Order[];
 
   setActiveCategory: (categoryId: string | null) => void;
-  addToCart: (product: Product, options?: { customizationId: string, optionIds: string[] }[]) => void;
+  addToCart: (
+    product: Product,
+    options?: { customizationId: string; optionIds: string[] }[],
+  ) => void;
   updateCartItem: (itemId: string, quantity: number) => void;
-  updateCartItemOptions: (itemId: string, options: { customizationId: string, optionIds: string[] }[]) => void;
+  updateCartItemOptions: (
+    itemId: string,
+    options: { customizationId: string; optionIds: string[] }[],
+  ) => void;
   updateCartItemNotes: (itemId: string, notes: string) => void;
   removeFromCart: (itemId: string) => void;
   clearCart: () => void;
 
-  createOrder: (paymentMethod: PaymentMethod, customerName?: string, notes?: string) => Order;
-  updateOrderStatus: (orderId: string, status: Order['status']) => void;
+  createOrder: (
+    paymentMethod: PaymentMethod,
+    customerName?: string,
+    notes?: string,
+  ) => Order;
+  updateOrderStatus: (orderId: string, status: Order["status"]) => void;
 
-  calculateItemPrice: (product: Product, options?: { customizationId: string, optionIds: string[] }[]) => number;
+  calculateItemPrice: (
+    product: Product,
+    options?: { customizationId: string; optionIds: string[] }[],
+  ) => number;
 }
 
 export const usePOSStore = create<POSState>()(
@@ -61,7 +74,8 @@ export const usePOSStore = create<POSState>()(
               const product = products.find((p) => p.id === item.productId);
               if (!product) return item;
 
-              const newTotalPrice = get().calculateItemPrice(product, item.options) * quantity;
+              const newTotalPrice =
+                get().calculateItemPrice(product, item.options) * quantity;
 
               return {
                 ...item,
@@ -83,7 +97,8 @@ export const usePOSStore = create<POSState>()(
               const product = products.find((p) => p.id === item.productId);
               if (!product) return item;
 
-              const newTotalPrice = get().calculateItemPrice(product, options) * item.quantity;
+              const newTotalPrice =
+                get().calculateItemPrice(product, options) * item.quantity;
 
               return {
                 ...item,
@@ -101,7 +116,7 @@ export const usePOSStore = create<POSState>()(
       updateCartItemNotes: (itemId, notes) => {
         set((state) => ({
           cart: state.cart.map((item) =>
-            item.id === itemId ? { ...item, notes } : item
+            item.id === itemId ? { ...item, notes } : item,
           ),
         }));
       },
@@ -116,19 +131,24 @@ export const usePOSStore = create<POSState>()(
 
       createOrder: (paymentMethod, customerName, notes) => {
         const { cart } = get();
-        const subtotal = cart.reduce((total, item) => total + item.totalPrice, 0);
+        const subtotal = cart.reduce(
+          (total, item) => total + item.totalPrice,
+          0,
+        );
         const tax = subtotal * 0.0825; // 8.25% tax rate
         const total = subtotal + tax;
 
         const newOrder: Order = {
-          id: `ORD-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+          id: `ORD-${Math.floor(Math.random() * 10000)
+            .toString()
+            .padStart(4, "0")}`,
           items: [...cart],
           subtotal,
           tax,
           total,
-          status: 'pending',
+          status: "pending",
           paymentMethod,
-          paymentStatus: 'paid', // Assume paid for simplicity
+          paymentStatus: "paid", // Assume paid for simplicity
           customerName,
           notes,
           timestamp: new Date(),
@@ -145,13 +165,20 @@ export const usePOSStore = create<POSState>()(
 
       updateOrderStatus: (orderId, status) => {
         set((state) => ({
-          activeOrder: state.activeOrder?.id === orderId
-            ? { ...state.activeOrder, status }
-            : state.activeOrder,
+          activeOrder:
+            state.activeOrder?.id === orderId
+              ? { ...state.activeOrder, status }
+              : state.activeOrder,
           recentOrders: state.recentOrders.map((order) =>
             order.id === orderId
-              ? { ...order, status, ...(status === 'completed' ? { completedAt: new Date() } : {}) }
-              : order
+              ? {
+                  ...order,
+                  status,
+                  ...(status === "completed"
+                    ? { completedAt: new Date() }
+                    : {}),
+                }
+              : order,
           ),
         }));
       },
@@ -165,15 +192,13 @@ export const usePOSStore = create<POSState>()(
 
         options.forEach((optionChoice) => {
           const customization = product.customizations?.find(
-            (c) => c.id === optionChoice.customizationId
+            (c) => c.id === optionChoice.customizationId,
           );
 
           if (!customization) return;
 
           optionChoice.optionIds.forEach((optionId) => {
-            const option = customization.options.find(
-              (o) => o.id === optionId
-            );
+            const option = customization.options.find((o) => o.id === optionId);
 
             if (option) {
               basePrice += option.price;
@@ -185,10 +210,10 @@ export const usePOSStore = create<POSState>()(
       },
     }),
     {
-      name: 'pos-store',
+      name: "pos-store",
       partialize: (state) => ({
         recentOrders: state.recentOrders,
       }),
-    }
-  )
+    },
+  ),
 );

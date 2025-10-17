@@ -1,40 +1,44 @@
-"use client"
+"use client";
 
-import { usePOSStore } from '@/lib/store';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { OrderCard } from '@/components/orders/order-card';
-import { recentOrders } from '@/lib/data';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
+import { OrderCard } from "@/components/orders/order-card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { recentOrders } from "@/lib/data";
+import { usePOSStore } from "@/lib/store";
 
 export function OrdersSection() {
   const { recentOrders: storeOrders } = usePOSStore();
   const [allOrders, setAllOrders] = useState(recentOrders);
-  
+
   useEffect(() => {
     // Combine store orders with demo orders for display
     setAllOrders([...storeOrders, ...recentOrders]);
   }, [storeOrders]);
-  
-  const activeOrders = allOrders.filter(order => 
-    ['pending', 'preparing', 'ready'].includes(order.status)
+
+  const activeOrders = allOrders.filter((order) =>
+    ["pending", "preparing", "ready"].includes(order.status),
   );
-  
-  const completedOrders = allOrders.filter(order => 
-    order.status === 'completed'
+
+  const completedOrders = allOrders.filter(
+    (order) => order.status === "completed",
   );
-  
+
   return (
     <div className="container mx-auto my-4">
       <Card className="overflow-hidden">
         <CardHeader className="pb-3">
           <CardTitle>Order Management</CardTitle>
-          <CardDescription>
-            View and manage customer orders
-          </CardDescription>
+          <CardDescription>View and manage customer orders</CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <Tabs defaultValue="active">
             <TabsList className="mb-4">
@@ -48,7 +52,7 @@ export function OrdersSection() {
               </TabsTrigger>
               <TabsTrigger value="completed">Completed Orders</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="active">
               <ScrollArea className="h-[calc(100vh-240px)]">
                 <div className="space-y-4">
@@ -64,7 +68,7 @@ export function OrdersSection() {
                 </div>
               </ScrollArea>
             </TabsContent>
-            
+
             <TabsContent value="completed">
               <ScrollArea className="h-[calc(100vh-240px)]">
                 <div className="space-y-4">

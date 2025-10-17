@@ -1,19 +1,30 @@
-"use client"
+"use client";
 
-import { usePOSStore } from '@/lib/store';
-import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { CartItemCard } from '@/components/cart/cart-item-card';
-import { useState } from 'react';
-import { ShoppingCart, PackageCheck } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useMedia } from 'react-use'
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '../ui/drawer';
+import { AnimatePresence, motion } from "framer-motion";
+import { PackageCheck, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { useMedia } from "react-use";
+import { CartItemCard } from "@/components/cart/cart-item-card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { usePOSStore } from "@/lib/store";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
 export function CartSection() {
   const { cart } = usePOSStore();
-  const mediaQueryMatched = useMedia('(max-width: 1280px)')
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const mediaQueryMatched = useMedia("(max-width: 1280px)");
+  const [_checkoutOpen, setCheckoutOpen] = useState(false);
   // const { toast } = useToast();
 
   const subtotal = cart.reduce((total, item) => total + item.totalPrice, 0);
@@ -54,14 +65,16 @@ export function CartSection() {
               <DrawerDescription>
                 {cart.length === 0
                   ? "No items in cart"
-                  : `${cart.reduce((total, item) => total + item.quantity, 0)} item${cart.reduce((total, item) => total + item.quantity, 0) !== 1 ? 's' : ''}`}
+                  : `${cart.reduce((total, item) => total + item.quantity, 0)} item${cart.reduce((total, item) => total + item.quantity, 0) !== 1 ? "s" : ""}`}
               </DrawerDescription>
             </DrawerHeader>
             <div className="flex-1 overflow-hidden p-0">
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center p-4 text-center">
                   <PackageCheck className="h-12 w-12 text-muted-foreground mb-2 opacity-50" />
-                  <p className="text-muted-foreground">Add items to begin an order</p>
+                  <p className="text-muted-foreground">
+                    Add items to begin an order
+                  </p>
                 </div>
               ) : (
                 <ScrollArea className="h-full">
@@ -112,7 +125,7 @@ export function CartSection() {
           </DrawerContent>
         </Drawer>
       ) : (
-        <div className=' p-4 h-[calc(100dvh-80px)] xl:fade-in  flex justify-center items-center'>
+        <div className=" p-4 h-[calc(100dvh-80px)] xl:fade-in  flex justify-center items-center">
           <Card className="flex h-full flex-col xl:w-[400px]">
             <CardHeader className="pb-2">
               <div className="flex justify-between items-center">
@@ -132,7 +145,7 @@ export function CartSection() {
               <CardDescription>
                 {cart.length === 0
                   ? "No items in cart"
-                  : `${cart.reduce((total, item) => total + item.quantity, 0)} item${cart.reduce((total, item) => total + item.quantity, 0) !== 1 ? 's' : ''}`}
+                  : `${cart.reduce((total, item) => total + item.quantity, 0)} item${cart.reduce((total, item) => total + item.quantity, 0) !== 1 ? "s" : ""}`}
               </CardDescription>
             </CardHeader>
 
@@ -140,7 +153,9 @@ export function CartSection() {
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center p-4 text-center">
                   <PackageCheck className="h-12 w-12 text-muted-foreground mb-2 opacity-50" />
-                  <p className="text-muted-foreground">Add items to begin an order</p>
+                  <p className="text-muted-foreground">
+                    Add items to begin an order
+                  </p>
                 </div>
               ) : (
                 <ScrollArea className="h-full">
@@ -190,8 +205,7 @@ export function CartSection() {
             </div>
           </Card>
         </div>
-      )
-      }
+      )}
     </>
   );
 }

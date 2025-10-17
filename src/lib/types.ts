@@ -40,7 +40,7 @@ export type CartItem = {
   totalPrice: number;
 };
 
-export type PaymentMethod = 'cash' | 'card' | 'mobile';
+export type PaymentMethod = "cash" | "card" | "mobile";
 
 export type Order = {
   id: string;
@@ -48,9 +48,9 @@ export type Order = {
   total: number;
   subtotal: number;
   tax: number;
-  status: 'pending' | 'preparing' | 'ready' | 'completed' | 'cancelled';
+  status: "pending" | "preparing" | "ready" | "completed" | "cancelled";
   paymentMethod: PaymentMethod;
-  paymentStatus: 'pending' | 'paid';
+  paymentStatus: "pending" | "paid";
   customerName?: string;
   notes?: string;
   timestamp: Date;

@@ -1,16 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import { Product, ProductCustomization, ProductOption } from '@/lib/types';
-import { usePOSStore } from '@/lib/store';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Check } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+import { usePOSStore } from "@/lib/store";
+import type { Product, ProductOption } from "@/lib/types";
 
 interface ProductCustomizerProps {
   product: Product;
@@ -18,17 +23,27 @@ interface ProductCustomizerProps {
   onClose: () => void;
 }
 
-export function ProductCustomizer({ product, open, onClose }: ProductCustomizerProps) {
+export function ProductCustomizer({
+  product,
+  open,
+  onClose,
+}: ProductCustomizerProps) {
   const { addToCart, calculateItemPrice } = usePOSStore();
-  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string[] }>({});
-  const [notes, setNotes] = useState('');
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: string[];
+  }>({});
+  const [notes, setNotes] = useState("");
 
   // Initialize default selections for required customizations
   useState(() => {
     const defaults: { [key: string]: string[] } = {};
 
-    product.customizations?.forEach(customization => {
-      if (customization.required && !customization.multiSelect && customization.options.length > 0) {
+    product.customizations?.forEach((customization) => {
+      if (
+        customization.required &&
+        !customization.multiSelect &&
+        customization.options.length > 0
+      ) {
         defaults[customization.id] = [customization.options[0].id];
       }
     });
@@ -36,8 +51,12 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
     setSelectedOptions(defaults);
   });
 
-  const handleOptionChange = (customizationId: string, optionId: string, multiSelect: boolean) => {
-    setSelectedOptions(prev => {
+  const handleOptionChange = (
+    customizationId: string,
+    optionId: string,
+    multiSelect: boolean,
+  ) => {
+    setSelectedOptions((prev) => {
       const current = prev[customizationId] || [];
 
       if (multiSelect) {
@@ -45,14 +64,14 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
         return {
           ...prev,
           [customizationId]: current.includes(optionId)
-            ? current.filter(id => id !== optionId)
-            : [...current, optionId]
+            ? current.filter((id) => id !== optionId)
+            : [...current, optionId],
         };
       } else {
         // Replace selection for single-select
         return {
           ...prev,
-          [customizationId]: [optionId]
+          [customizationId]: [optionId],
         };
       }
     });
@@ -61,25 +80,29 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
   const handleAddToCart = () => {
     // Validate required options
     const missingRequired = product.customizations?.some(
-      customization => customization.required &&
-        (!selectedOptions[customization.id] || selectedOptions[customization.id].length === 0)
+      (customization) =>
+        customization.required &&
+        (!selectedOptions[customization.id] ||
+          selectedOptions[customization.id].length === 0),
     );
 
     if (missingRequired) {
       return; // Don't proceed if required options are missing
     }
 
-    const options = Object.entries(selectedOptions).map(([customizationId, optionIds]) => ({
-      customizationId,
-      optionIds
-    }));
+    const options = Object.entries(selectedOptions).map(
+      ([customizationId, optionIds]) => ({
+        customizationId,
+        optionIds,
+      }),
+    );
 
     addToCart(product, options);
     onClose();
 
     // Reset state
     setSelectedOptions({});
-    setNotes('');
+    setNotes("");
   };
 
   // Calculate current price with options
@@ -87,15 +110,17 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
     product,
     Object.entries(selectedOptions).map(([customizationId, optionIds]) => ({
       customizationId,
-      optionIds
-    }))
+      optionIds,
+    })),
   );
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-xl">Customize {product.name}</DialogTitle>
+          <DialogTitle className="text-xl">
+            Customize {product.name}
+          </DialogTitle>
         </DialogHeader>
 
         <ScrollArea className="flex-1 pr-4">
@@ -105,10 +130,14 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
                 <div className="flex justify-between">
                   <Label className="text-base font-medium">
                     {customization.name}
-                    {customization.required && <span className="text-destructive ml-1">*</span>}
+                    {customization.required && (
+                      <span className="text-destructive ml-1">*</span>
+                    )}
                   </Label>
                   {customization.multiSelect && (
-                    <span className="text-xs text-muted-foreground">Select multiple</span>
+                    <span className="text-xs text-muted-foreground">
+                      Select multiple
+                    </span>
                   )}
                 </div>
 
@@ -118,15 +147,21 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
                       <OptionCheckbox
                         key={option.id}
                         option={option}
-                        checked={(selectedOptions[customization.id] || []).includes(option.id)}
-                        onChange={() => handleOptionChange(customization.id, option.id, true)}
+                        checked={(
+                          selectedOptions[customization.id] || []
+                        ).includes(option.id)}
+                        onChange={() =>
+                          handleOptionChange(customization.id, option.id, true)
+                        }
                       />
                     ))}
                   </div>
                 ) : (
                   <RadioGroup
-                    value={selectedOptions[customization.id]?.[0] || ''}
-                    onValueChange={(value) => handleOptionChange(customization.id, value, false)}
+                    value={selectedOptions[customization.id]?.[0] || ""}
+                    onValueChange={(value) =>
+                      handleOptionChange(customization.id, value, false)
+                    }
                   >
                     {customization.options.map((option) => (
                       <OptionRadio
@@ -141,7 +176,9 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
             ))}
 
             <div className="space-y-3">
-              <Label htmlFor="notes" className="text-base font-medium">Special Instructions</Label>
+              <Label htmlFor="notes" className="text-base font-medium">
+                Special Instructions
+              </Label>
               <Textarea
                 id="notes"
                 placeholder="Any special requests or notes..."
@@ -167,7 +204,7 @@ export function ProductCustomizer({ product, open, onClose }: ProductCustomizerP
 function OptionCheckbox({
   option,
   checked,
-  onChange
+  onChange,
 }: {
   option: ProductOption;
   checked: boolean;
@@ -175,12 +212,11 @@ function OptionCheckbox({
 }) {
   return (
     <div className="flex items-center space-x-2">
-      <Checkbox
-        id={option.id}
-        checked={checked}
-        onCheckedChange={onChange}
-      />
-      <Label htmlFor={option.id} className="flex-1 flex justify-between cursor-pointer">
+      <Checkbox id={option.id} checked={checked} onCheckedChange={onChange} />
+      <Label
+        htmlFor={option.id}
+        className="flex-1 flex justify-between cursor-pointer"
+      >
         <span>{option.name}</span>
         {option.price > 0 && <span>+${option.price.toFixed(2)}</span>}
       </Label>
@@ -190,7 +226,7 @@ function OptionCheckbox({
 
 function OptionRadio({
   option,
-  value
+  value,
 }: {
   option: ProductOption;
   value: string;
@@ -198,7 +234,10 @@ function OptionRadio({
   return (
     <div className="flex items-center space-x-2">
       <RadioGroupItem value={value} id={value} />
-      <Label htmlFor={value} className="flex-1 flex justify-between cursor-pointer">
+      <Label
+        htmlFor={value}
+        className="flex-1 flex justify-between cursor-pointer"
+      >
         <span>{option.name}</span>
         {option.price > 0 && <span>+${option.price.toFixed(2)}</span>}
       </Label>

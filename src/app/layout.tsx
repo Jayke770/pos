@@ -1,20 +1,23 @@
 import "@/app/styles/globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/theme-provider";
-import { appConfig } from "@/lib/config";
-import { Toaster } from '@/components/ui/sonner';
+import { Inter } from "next/font/google";
+import { getServerSession } from "next-auth";
 import { NextAuthSessionProvider } from "@/components/context/session";
-import { getServerSession } from 'next-auth'
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { appConfig } from "@/lib/config";
 import { AuthOptions } from "@/services/next-auth/auth";
-import { Analytics } from "@vercel/analytics/next"
-import { Inter } from 'next/font/google'
-const inter = Inter({ subsets: ['latin'] })
+
+const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: appConfig.appName,
   description: "Best Coffee",
 };
-export default async function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-  const session = await getServerSession(AuthOptions)
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const session = await getServerSession(AuthOptions);
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>

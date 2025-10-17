@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { Category } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { motion } from "framer-motion";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import type { Category } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface CategoryFilterProps {
   categories: Category[];
@@ -14,7 +14,7 @@ interface CategoryFilterProps {
 export function CategoryFilter({
   categories,
   activeCategory,
-  onSelectCategory
+  onSelectCategory,
 }: CategoryFilterProps) {
   return (
     <ScrollArea className="whitespace-nowrap">
@@ -42,7 +42,7 @@ export function CategoryFilter({
 function CategoryButton({
   active,
   onClick,
-  name
+  name,
 }: {
   active: boolean;
   onClick: () => void;
@@ -50,12 +50,13 @@ function CategoryButton({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={cn(
         "relative px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer",
         active
           ? "bg-primary text-primary-foreground"
-          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          : "bg-secondary text-secondary-foreground hover:bg-secondary/80",
       )}
     >
       {name}

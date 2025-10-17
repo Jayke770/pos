@@ -1,17 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { usePOSStore } from '@/lib/store';
-import { PaymentMethod } from '@/lib/types';
-import { Check, CreditCard, Banknote, Smartphone } from 'lucide-react';
-import { toast } from "sonner"
-import { OrderReceipt } from '@/components/orders/order-receipt';
+import { Banknote, Check, CreditCard, Smartphone } from "lucide-react";
+import { useState } from "react";
+import { OrderReceipt } from "@/components/orders/order-receipt";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { usePOSStore } from "@/lib/store";
+import type { PaymentMethod } from "@/lib/types";
 
 interface CheckoutDialogProps {
   open: boolean;
@@ -20,11 +26,13 @@ interface CheckoutDialogProps {
 
 export function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   const { cart, createOrder } = usePOSStore();
-  const [customerName, setCustomerName] = useState('');
-  const [notes, setNotes] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+  const [customerName, setCustomerName] = useState("");
+  const [notes, setNotes] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
   const [orderComplete, setOrderComplete] = useState(false);
-  const [currentOrder, setCurrentOrder] = useState<ReturnType<typeof createOrder> | null>(null);
+  const [currentOrder, setCurrentOrder] = useState<ReturnType<
+    typeof createOrder
+  > | null>(null);
 
   const subtotal = cart.reduce((total, item) => total + item.totalPrice, 0);
   const tax = subtotal * 0.0825; // 8.25% tax
@@ -36,7 +44,7 @@ export function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
     const order = createOrder(
       paymentMethod,
       customerName.trim() || undefined,
-      notes.trim() || undefined
+      notes.trim() || undefined,
     );
 
     setCurrentOrder(order);
@@ -50,9 +58,9 @@ export function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
   };
 
   const handleClose = () => {
-    setCustomerName('');
-    setNotes('');
-    setPaymentMethod('card');
+    setCustomerName("");
+    setNotes("");
+    setPaymentMethod("card");
     setOrderComplete(false);
     setCurrentOrder(null);
     onClose();
@@ -85,28 +93,30 @@ export function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
                 <Label>Payment Method</Label>
                 <RadioGroup
                   value={paymentMethod}
-                  onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+                  onValueChange={(value) =>
+                    setPaymentMethod(value as PaymentMethod)
+                  }
                   className="grid grid-cols-3 gap-2"
                 >
                   <PaymentOption
                     value="card"
                     label="Card"
                     icon={<CreditCard className="h-4 w-4" />}
-                    selected={paymentMethod === 'card'}
+                    selected={paymentMethod === "card"}
                   />
 
                   <PaymentOption
                     value="cash"
                     label="Cash"
                     icon={<Banknote className="h-4 w-4" />}
-                    selected={paymentMethod === 'cash'}
+                    selected={paymentMethod === "cash"}
                   />
 
                   <PaymentOption
                     value="mobile"
                     label="Mobile"
                     icon={<Smartphone className="h-4 w-4" />}
-                    selected={paymentMethod === 'mobile'}
+                    selected={paymentMethod === "mobile"}
                   />
                 </RadioGroup>
               </div>
@@ -139,7 +149,9 @@ export function CheckoutDialog({ open, onClose }: CheckoutDialogProps) {
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={handleClose}>Cancel</Button>
+              <Button variant="outline" onClick={handleClose}>
+                Cancel
+              </Button>
               <Button onClick={handleCheckout} disabled={cart.length === 0}>
                 Complete Order
               </Button>
@@ -176,7 +188,7 @@ function PaymentOption({
   value,
   label,
   icon,
-  selected
+  selected,
 }: {
   value: string;
   label: string;
@@ -190,7 +202,7 @@ function PaymentOption({
         htmlFor={value}
         className={`
           flex flex-col items-center justify-center p-3 border rounded-lg cursor-pointer
-          ${selected ? 'border-primary bg-primary/5' : 'border-input'}
+          ${selected ? "border-primary bg-primary/5" : "border-input"}
           hover:bg-accent hover:text-accent-foreground transition-colors
         `}
       >
