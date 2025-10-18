@@ -34,15 +34,16 @@ jobs:
       
       - name: Install dependencies
         run: bun install
-
+          
       - name: Install Encore CLI
         run: bash install.sh
-
+      - name: Print working directory
+        run: pwd
       - name: Disable telemetry
-        run: encore telemetry disable
+        run: /home/runner/.encore/bin/encore telemetry disable
 
       - name: Build Docker image
-        run: encore build --config infra.json docker pos
+        run: /home/runner/.encore/bin/encore build --config infra.json docker pos
 
       - name: Tag Docker image
         run: docker tag pos ghcr.io/${{ github.repository }}:latest
