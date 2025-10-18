@@ -1,6 +1,5 @@
-import { APIError } from "encore.dev/api";
-import log from "encore.dev/log";
-import { InventoryModel } from "../models/inventory";
+import { InventoryModel } from "@/api/models/inventory";
+import type { inventorySchema } from "@/api/models/schema";
 export interface InventoryItem {
 	name: string;
 	id: string;
@@ -13,45 +12,34 @@ export interface InventoryItem {
 	addToPos: boolean | null;
 	description: string | null;
 }
-
-export interface AddInventoryItem {
-	data: Omit<InventoryItem, "id" | "createdAt" | "updatedAt">;
-}
-export type AddInventoryItemResponse = Omit<
-	InventoryItem,
-	"id" | "createdAt" | "updatedAt"
->;
-export interface GetInventoryItemsResponse {
-	data: InventoryItem[];
-}
 export namespace InventoryService {
 	export async function addInventoryItem(
-		params: AddInventoryItem,
-	): Promise<AddInventoryItemResponse> {
+		params: typeof inventorySchema.$inferInsert,
+	): Promise<typeof inventorySchema.$inferSelect> {
 		try {
-			const newInventoryItem = await InventoryModel.insertInventoryItem(
-				params.data,
-			);
+			const newInventoryItem = await InventoryModel.insertInventoryItem(params);
 			if (!newInventoryItem) {
-				throw APIError.internal("No inventory item was created");
+				throw new Error("No inventory item was created");
 			}
 			return newInventoryItem;
 		} catch (error) {
-			log.error("Error adding inventory item:", error);
-			throw APIError.internal("Failed to add inventory item");
+			console.error("Error adding inventory item:", error);
+			throw new Error("Failed to add inventory item");
 		}
 	}
 
-	export async function getInventoryItems(): Promise<GetInventoryItemsResponse> {
+	export async function getInventoryItems(): Promise<
+		(typeof inventorySchema.$inferSelect)[]
+	> {
 		try {
 			const inventoryItems = await InventoryModel.findAllInventoryItems();
 			if (!inventoryItems) {
-				throw APIError.internal("No inventory items found");
+				throw new Error("No inventory items found");
 			}
-			return { data: inventoryItems };
+			return inventoryItems;
 		} catch (error) {
-			log.error("Error fetching inventory items:", error);
-			throw APIError.internal("Failed to fetch inventory items");
+			console.error("Error fetching inventory items:", error);
+			throw new Error("Failed to fetch inventory items");
 		}
 	}
 }

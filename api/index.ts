@@ -1,0 +1,29 @@
+import { cors } from "@elysiajs/cors";
+import { openapi } from "@elysiajs/openapi";
+import { Elysia } from "elysia";
+import { autoload } from "elysia-autoload";
+import { envConfig } from "@/api/lib/environment";
+
+const app = new Elysia()
+	.use(
+		cors({
+			origin: ["http://127.0.0.1:3000",],
+		}),
+	)
+	.use(
+		await autoload({
+			dir: "./routes",
+			prefix: "/api",
+			types: {
+				typeName: "Routes",
+			},
+			ignore: ["**/*.test.ts", "**/*.spec.ts"],
+		}),
+	)
+	.use(openapi())
+	.get("/", () => "OK", { tags: ["Health"] })
+	.onStart(() => {
+		console.log(`Server running on port ${envConfig.PORT}`);
+	})
+	.listen(envConfig.PORT);
+export type ElysiaApp = typeof app;

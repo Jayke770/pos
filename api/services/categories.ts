@@ -1,40 +1,29 @@
-import { APIError, type Query } from "encore.dev/api";
-import log from "encore.dev/log";
 import { v7 as uuidV7 } from "uuid";
-import type { AuthParams } from "@/api/services/auth";
-import { CategoriesModel } from "../models/categories";
-export interface GetCategory {
-	type: Query<"inventory" | "product">;
-	token: AuthParams["token"];
-}
-interface ICategory {
-	category: string;
-	storeId: string;
-	totalProducts: number | null;
-	id: string;
-	createdAt: string | null;
-	updatedAt: string | null;
-}
+import { CategoriesModel } from "@/api/models/categories";
+import type { inventoryCategorySchema } from "@/api/models/schema";
+
+type ICategory = typeof inventoryCategorySchema.$inferSelect;
 export type GetCategoryResponse = { data: ICategory[] };
-export type AddCategory = { type: "inventory" | "product"; data: ICategory };
+export type AddCategory = {
+	type: "inventory" | "product";
+	data: Pick<ICategory, "category" | "storeId">;
+};
 export type AddOrUpdateCategoryResponse = { data: ICategory };
 export type UpdateCategory = {
 	type: "inventory" | "product";
 	id: string;
-	data: Partial<ICategory>;
+	data: Pick<ICategory, "category">;
 };
 
 export namespace CategoriesService {
 	export async function getCategories(
-		params: Omit<GetCategory, "token">,
-	): Promise<GetCategoryResponse> {
-		const categories = await CategoriesModel.findAllCategory(
-			params.type as "inventory" | "product",
-		);
+		category: "inventory" | "product",
+	): Promise<(typeof inventoryCategorySchema.$inferSelect)[]> {
+		const categories = await CategoriesModel.findAllCategory(category);
 		if (!categories) {
-			throw APIError.notFound("Categories not found");
+			throw new Error("Categories not found");
 		}
-		return { data: categories };
+		return categories;
 	}
 	export async function addCategory(
 		params: AddCategory,
@@ -42,17 +31,17 @@ export namespace CategoriesService {
 		try {
 			const storeId = uuidV7(); // Replace with actual store ID retrieval logic as needed
 			const newCategory = await CategoriesModel.insertCategory(
-				params.type as "inventory" | "product",
+				params.type,
 				storeId,
 				params.data,
 			);
 			if (!newCategory) {
-				throw APIError.invalidArgument("Invalid category type");
+				throw new Error("Invalid category type");
 			}
 			return { data: newCategory };
 		} catch (error) {
-			log.error("Error adding category:", error);
-			throw APIError.internal("Failed to add category");
+			console.error("Error adding category:", error);
+			throw new Error("Failed to add category");
 		}
 	}
 	export async function updateCategory(
@@ -67,10 +56,10 @@ export namespace CategoriesService {
 			if (updatedCategory) {
 				return { data: updatedCategory };
 			}
-			throw APIError.invalidArgument("Invalid category type");
+			throw new Error("Invalid category type");
 		} catch (error) {
-			log.error("Error updating category:", error);
-			throw APIError.internal("Failed to update category");
+			console.error("Error updating category:", error);
+			throw new Error("Failed to update category");
 		}
 	}
 }

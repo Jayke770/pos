@@ -1,1 +1,0 @@
-ALTER TABLE "users" ADD CONSTRAINT "validRole" CHECK ("users"."role" IN ('admin', 'manager', 'cashier'));

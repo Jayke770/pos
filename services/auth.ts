@@ -7,18 +7,14 @@ export namespace ClientAuthService {
 		const authToken = cookiesStore.find(
 			(cookie) => cookie.name === "auth-token",
 		)?.value;
-		const userData = await backendHandler
-			.with({
-				requestInit: {
-					credentials: "include",
-					headers: {
-						Cookie: `auth-token=${authToken}`,
-					},
+		const userData = await backendHandler.api.auth.me.get({
+			fetch: {
+				credentials: "include",
+				headers: {
+					Cookie: `auth-token=${authToken}`,
 				},
-			})
-			.pos_backend.me()
-			.then((e) => e)
-			.catch(() => null);
-		return userData;
+			}
+		})
+		return userData.data
 	}
 }

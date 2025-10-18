@@ -18,7 +18,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { APIError } from "@/lib/client";
 import { appConfig, backendHandler } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
@@ -41,9 +40,9 @@ export default function AuthForm() {
 	);
 	const onLogin = async (data: z.infer<typeof LoginFormSchema>) => {
 		onToggleIsSubmitting();
-		toast.promise(backendHandler.pos_backend.login(data), {
+		toast.promise(backendHandler.api.auth.login.post(data), {
 			loading: "Please wait...",
-			error: (e: APIError) => {
+			error: (e: Error) => {
 				onToggleIsSubmitting();
 				return e.message;
 			},

@@ -1,51 +1,42 @@
-import { APIError, type Cookie, type Header } from "encore.dev/api";
-import { authHandler as encoreAuth } from "encore.dev/auth";
-import log from "encore.dev/log";
 import jwt from "jsonwebtoken";
 import { envConfig } from "@/api/lib/environment";
 
-type UserRole = "super_admin" | "admin" | "cashier"
+type UserRole = "super_admin" | "admin" | "cashier";
 
 export interface LoginParams {
 	username: string;
 	password: string;
 }
 export interface AuthUserData {
-	userID: string;
+	id: string;
 	storeId: string;
 	username: string;
 	role: UserRole;
 }
 export interface LoginResponse {
 	userData: AuthUserData;
-	token: Cookie<"auth-token">;
+	token: string;
 }
-export interface AuthParams {
-	token: Cookie<"auth-token">;
-	authorizationHeader?: Header<"authorization">;
-}
-
-export const authHandler = encoreAuth<AuthParams, AuthUserData>(
-	async (params) => {
-		try {
-			log.info("Verifying token:", params.token?.value);
-			const data = jwt.verify(
-				params.token?.value,
-				envConfig.JWT_SECRET,
-			) as AuthUserData;
-			log.info("Authenticated user:", data.username);
-			return data;
-		} catch (e) {
-			log.error("Authentication failed:", e);
-			if (e instanceof jwt.TokenExpiredError) {
-				throw APIError.permissionDenied("Token expired");
-			}
-			throw APIError.permissionDenied("Invalid token");
-		}
-	},
-);
 
 export namespace AuthService {
+
+	export async function getUser(token: string): Promise<AuthUserData | null> {
+		try {
+			console.info("Verifying token:", token);
+			const data = jwt.verify(
+				token,
+				envConfig.JWT_SECRET,
+			) as AuthUserData;
+			console.info("Authenticated user:", data.username);
+			return data;
+		} catch (e) {
+			console.error("Authentication failed:", e);
+			if (e instanceof jwt.TokenExpiredError) {
+				throw new Error("Token expired");
+			}
+			throw new Error("Invalid token");
+		}
+	}
 	export async function login(params: LoginParams): Promise<LoginResponse> {
 		//check if superadmin
 		if (
@@ -54,7 +45,7 @@ export namespace AuthService {
 		) {
 			const userData: LoginResponse["userData"] = {
 				storeId: "super-admin",
-				userID: "super-admin",
+				id: "super-admin",
 				username: envConfig.SUPER_ADMIN_USERNAME,
 				role: "super_admin",
 			};
@@ -64,16 +55,9 @@ export namespace AuthService {
 			});
 			return {
 				userData,
-				token: {
-					value: jwtToken,
-					expires: new Date(Date.now() + 7 * 24 * 3600 * 1000),
-					path: "/",
-					httpOnly: true,
-					secure: envConfig.NODE_ENV === "production",
-					sameSite: "Lax",
-				},
+				token: jwtToken,
 			};
 		}
-		throw APIError.permissionDenied("Invalid credentials");
+		throw new Error("Invalid credentials");
 	}
 }

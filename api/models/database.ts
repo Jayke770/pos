@@ -1,11 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import { SQLDatabase } from "encore.dev/storage/sqldb";
+import postgres from "postgres";
+import { envConfig } from "@/api/lib/environment";
 
-const dbConfig = new SQLDatabase("pos", {
-	migrations: {
-		path: "migrations",
-		source: "drizzle",
-	},
-});
-const db = drizzle(dbConfig.connectionString);
+const client = postgres(envConfig.DATABASE_URL);
+const db = drizzle({ client });
 export { db };

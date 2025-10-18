@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm";
 import * as p from "drizzle-orm/pg-core";
 
-
 export const storeSchema = p.pgTable("stores", {
 	id: p.uuid().primaryKey().defaultRandom(),
 	name: p.text().notNull(),
@@ -13,37 +12,47 @@ export const storeSchema = p.pgTable("stores", {
 		.defaultNow()
 		.$onUpdate(() => new Date())
 		.$type<string>(),
-})
+});
 
-export const userRoleEnum = p.pgEnum("userRole", ["admin", "manager", "cashier"]);
-
-export const userSchema = p.pgTable("users", {
-	id: p.uuid().primaryKey().defaultRandom(),
-	storeId: p.uuid().notNull().references(() => storeSchema.id),
-	username: p.text().notNull().unique(),
-	passwordHash: p.text().notNull(),
-	role: userRoleEnum("role").notNull(),
-	createdAt: p.timestamp().defaultNow().$type<string>(),
-	updatedAt: p
-		.timestamp()
-		.defaultNow()
-		.$onUpdate(() => new Date())
-		.$type<string>(),
-}, table => [
-	p.check("validRole", sql`${table.role} IN ('admin', 'manager', 'cashier')`)
+export const userRoleEnum = p.pgEnum("userRole", [
+	"admin",
+	"manager",
+	"cashier",
 ]);
+
+export const userSchema = p.pgTable(
+	"users",
+	{
+		id: p.uuid().primaryKey().defaultRandom(),
+		storeId: p
+			.uuid()
+			.notNull()
+			.references(() => storeSchema.id),
+		username: p.text().notNull().unique(),
+		passwordHash: p.text().notNull(),
+		role: userRoleEnum("role").notNull(),
+		createdAt: p.timestamp().defaultNow().$type<string>(),
+		updatedAt: p
+			.timestamp()
+			.defaultNow()
+			.$onUpdate(() => new Date())
+			.$type<string>(),
+	},
+	(table) => [
+		p.check("validRole", sql`${table.role} IN ('admin', 'manager', 'cashier')`),
+	],
+);
 
 export const productCategorySchema = p.pgTable("product_categories", {
 	category: p.text().notNull().unique(),
 	storeId: p.uuid().notNull(),
 	totalProducts: p.numeric({ mode: "number" }).default(0),
 	id: p.uuid().primaryKey().defaultRandom(),
-	createdAt: p.timestamp().defaultNow().$type<string>(),
+	createdAt: p.timestamp().defaultNow(),
 	updatedAt: p
 		.timestamp()
 		.defaultNow()
-		.$onUpdate(() => new Date())
-		.$type<string>(),
+		.$onUpdate(() => new Date()),
 });
 
 export const inventoryCategorySchema = p.pgTable("inventory_categories", {
@@ -51,12 +60,11 @@ export const inventoryCategorySchema = p.pgTable("inventory_categories", {
 	storeId: p.uuid().notNull(),
 	totalProducts: p.numeric({ mode: "number" }).default(0),
 	id: p.uuid().primaryKey().defaultRandom(),
-	createdAt: p.timestamp().defaultNow().$type<string>(),
+	createdAt: p.timestamp().defaultNow(),
 	updatedAt: p
 		.timestamp()
 		.defaultNow()
-		.$onUpdate(() => new Date())
-		.$type<string>(),
+		.$onUpdate(() => new Date()),
 });
 
 export const productSchema = p.pgTable("products", {

@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import log from "encore.dev/log";
 import { db } from "@/api/models/database";
 import {
 	inventoryCategorySchema,
@@ -21,14 +20,17 @@ export namespace CategoriesModel {
 				);
 			return categories;
 		} catch (error) {
-			log.error("Error fetching categories:", error);
+			console.error("Error fetching categories:", error);
 			return null;
 		}
 	}
 	export async function insertCategory(
 		categoryType: CategoryType,
 		storeId: string,
-		data: typeof inventoryCategorySchema.$inferInsert,
+		data: Pick<
+			typeof inventoryCategorySchema.$inferInsert,
+			"category" | "storeId"
+		>,
 	): Promise<typeof inventoryCategorySchema.$inferSelect | null> {
 		try {
 			if (categoryType === "inventory") {
@@ -45,10 +47,10 @@ export namespace CategoriesModel {
 					.returning();
 				return newCategory?.[0];
 			}
-			log.error("Invalid category type provided for insertion.");
+			console.error("Invalid category type provided for insertion.");
 			return null;
 		} catch (error) {
-			log.error("Error inserting category:", error);
+			console.error("Error inserting category:", error);
 			return null;
 		}
 	}
@@ -75,10 +77,10 @@ export namespace CategoriesModel {
 					.returning();
 				return updatedCategory?.[0];
 			}
-			log.error("Invalid category type provided for update.");
+			console.error("Invalid category type provided for update.");
 			return null;
 		} catch (error) {
-			log.error("Error updating category:", error);
+			console.error("Error updating category:", error);
 			return null;
 		}
 	}

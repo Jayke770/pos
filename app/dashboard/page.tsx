@@ -5,7 +5,7 @@ import { DashboardSales } from "@/components/dashboard/sales";
 import { DashboardStats } from "@/components/dashboard/stats";
 import { ClientAuthService } from "@/services/auth";
 export default async function DashboardPage() {
-	const userData = await ClientAuthService.getUser()
+	const userData = await ClientAuthService.getUser();
 	if (!userData) redirect("/");
 	return (
 		<div className=" flex flex-col space-y-4 sm:space-y-6">
