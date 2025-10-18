@@ -1,12 +1,12 @@
 FROM oven/bun AS build
 
 WORKDIR /app
-COPY package.json package.json
+COPY *.json ./
 COPY bun.lock bun.lock
 
 RUN bun install
 
-COPY ./api .
+COPY ./api ./api
 
 ENV NODE_ENV=production
 
@@ -23,6 +23,6 @@ WORKDIR /app
 
 COPY --from=build /app/server server
 
-ENV NODE_ENV=production
+ENV NODE_ENV production
 
 CMD ["./server"]
