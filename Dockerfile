@@ -1,49 +1,28 @@
-# Use Bun's official image as base
-FROM oven/bun:latest-alpine AS base
+FROM oven/bun AS build
 
-# Set working directory
 WORKDIR /app
+COPY package.json package.json
+COPY bun.lock bun.lock
 
-# Copy package files
-COPY package.json bun.lockb* ./
+RUN bun install
 
-# Install dependencies
-RUN bun install --frozen-lockfile
+COPY ./api ./api
 
-# Copy source code
-COPY . .
-
-# Production stage
-FROM oven/bun:latest-alpine AS production
-
-# Set working directory
-WORKDIR /app
-
-# Copy dependencies and source from base stage
-COPY --from=base /app/node_modules ./node_modules
-COPY --from=base /app/package.json ./package.json
-COPY --from=base /app/api ./api
-COPY --from=base /app/lib ./lib
-COPY --from=base /app/types ./types
-COPY --from=base /app/services ./services
-COPY --from=base /app/drizzle.config.ts ./drizzle.config.ts
-COPY --from=base /app/tsconfig.json ./tsconfig.json
-COPY --from=base /app/biome.json ./biome.json
-
-# Create a non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S apiuser -u 1001
-
-# Change ownership of the app directory to the apiuser
-RUN chown -R apiuser:nodejs /app
-USER apiuser
-
-# Set environment variables
 ENV NODE_ENV=production
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://127.0.0.1:4000/api/health || exit 1
+RUN bun build \
+	--compile \
+	--minify-whitespace \
+	--minify-syntax \
+	--outfile server \
+	api/index.ts
 
-# Start the API server
-CMD ["bun", "run", "api"]
+FROM gcr.io/distroless/base
+
+WORKDIR /app
+
+COPY --from=build /app/server server
+
+ENV NODE_ENV=production
+
+CMD ["./server"]
