@@ -1,10 +1,6 @@
 {
   "name": "pos",
   "version": "0.1.0",
-  "workspaces": [
-    "api",
-    "web"
-  ],
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
