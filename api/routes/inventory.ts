@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia";
 import { InventoryService } from "@/api/services/inventory";
 
-const app = new Elysia()
+const app = new Elysia();
 
 app.post("", ({ body }) => InventoryService.addInventoryItem(body), {
 	tags: ["Inventory"],

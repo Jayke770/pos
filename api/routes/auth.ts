@@ -5,7 +5,7 @@ import { envConfig } from "../lib/environment";
 const app = new Elysia()
 	.get("/me", ({ cookie }) => AuthService.getUser(cookie.token.value), {
 		cookie: t.Object({
-			token: t.String()
+			token: t.String(),
 		}),
 		tags: ["Authentication"],
 		response: {
@@ -19,8 +19,8 @@ const app = new Elysia()
 					t.Literal("cashier"),
 				]),
 			}),
-			401: t.Null()
-		}
+			401: t.Null(),
+		},
 	})
 	.post(
 		"/login",
@@ -60,6 +60,5 @@ const app = new Elysia()
 			},
 		},
 	);
-
 
 export default app;

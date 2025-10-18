@@ -19,14 +19,10 @@ export interface LoginResponse {
 }
 
 export namespace AuthService {
-
 	export async function getUser(token: string): Promise<AuthUserData | null> {
 		try {
 			console.info("Verifying token:", token);
-			const data = jwt.verify(
-				token,
-				envConfig.JWT_SECRET,
-			) as AuthUserData;
+			const data = jwt.verify(token, envConfig.JWT_SECRET) as AuthUserData;
 			console.info("Authenticated user:", data.username);
 			return data;
 		} catch (e) {

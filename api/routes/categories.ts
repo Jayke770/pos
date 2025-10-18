@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia";
 import { CategoriesService } from "@/api/services/categories";
 
-const app = new Elysia()
+const app = new Elysia();
 
 app.get("", async ({ query }) => CategoriesService.getCategories(query.type), {
 	tags: ["Categories"],

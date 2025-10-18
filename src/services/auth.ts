@@ -13,8 +13,8 @@ export namespace ClientAuthService {
 				headers: {
 					Cookie: `auth-token=${authToken}`,
 				},
-			}
-		})
-		return userData.data
+			},
+		});
+		return userData.data;
 	}
 }
