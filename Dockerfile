@@ -6,7 +6,7 @@ COPY bun.lock bun.lock
 
 RUN bun install
 
-COPY ./api ./api
+COPY ./api .
 
 ENV NODE_ENV=production
 
