@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "server:start": "bun run api",
     "server:dev": "bun run --watch api",
     "lint": "biome check --write .",
     "format": "biome format --write"

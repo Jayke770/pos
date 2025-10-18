@@ -7,7 +7,7 @@ import { envConfig } from "@/api/lib/environment";
 const app = new Elysia()
 	.use(
 		cors({
-			origin: ["http://127.0.0.1:3000",],
+			origin: envConfig.ORIGINS,
 		}),
 	)
 	.use(
