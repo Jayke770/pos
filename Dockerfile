@@ -23,6 +23,6 @@ WORKDIR /app
 
 COPY --from=build /app/server server
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 CMD ["./server"]
