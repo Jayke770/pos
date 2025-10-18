@@ -39,8 +39,8 @@ jobs:
         run: bash install.sh
 
       - name: Generate client
-        run: /home/runner/.encore/bin/encore gen client --output=./lib/client.ts
-        
+        run: /home/runner/.encore/bin/encore gen client --output=./lib/client.ts -e=production 
+
       - name: Print working directory and list folders
         run: |
           pwd
