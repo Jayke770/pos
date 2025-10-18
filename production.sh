@@ -45,3 +45,7 @@ echo "🔨 Building Docker image with configuration..."
 encore build docker --config ./infra.json pos:latest
 
 echo "✅ Docker image 'pos:latest' built successfully!"
+
+# Run the Docker container
+echo "🚀 Starting Docker container on port 4000..."
+docker run -e PORT=4000 -p 4000:4000 pos:latest
