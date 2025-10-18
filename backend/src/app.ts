@@ -15,6 +15,7 @@ const app = new Elysia()
             dir: "./routes",
             prefix: "/api",
             types: {
+                output: "./",
                 typeName: "Routes",
             },
             ignore: ["**/*.test.ts", "**/*.spec.ts"],
