@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
-import { AuthService } from "@/api/services/auth";
-import { envConfig } from "../lib/environment";
+import { envConfig } from "@/lib/environment";
+import { AuthService } from "@/services/auth";
 
 const app = new Elysia()
 	.get("/me", ({ cookie }) => AuthService.getUser(cookie.token.value), {

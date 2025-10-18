@@ -1,15 +1,15 @@
 import { eq } from "drizzle-orm";
-import { db } from "@/api/models/database";
+import { db } from "@/models/database";
 import {
 	inventoryCategorySchema,
 	productCategorySchema,
-} from "@/api/models/schema";
+} from "@/models/schema";
 
 type CategoryType = "inventory" | "product";
 export namespace CategoriesModel {
 	export async function findAllCategory(
 		categoryType: CategoryType,
-	): Promise<(typeof inventoryCategorySchema.$inferSelect)[] | null> {
+	): Promise<(typeof inventoryCategorySchema.$inferSelect)[] | undefined> {
 		try {
 			const categories = await db
 				.select()
@@ -21,7 +21,7 @@ export namespace CategoriesModel {
 			return categories;
 		} catch (error) {
 			console.error("Error fetching categories:", error);
-			return null;
+			return undefined;
 		}
 	}
 	export async function insertCategory(
@@ -31,7 +31,7 @@ export namespace CategoriesModel {
 			typeof inventoryCategorySchema.$inferInsert,
 			"category" | "storeId"
 		>,
-	): Promise<typeof inventoryCategorySchema.$inferSelect | null> {
+	): Promise<typeof inventoryCategorySchema.$inferSelect | undefined> {
 		try {
 			if (categoryType === "inventory") {
 				const newCategory = await db
@@ -48,10 +48,10 @@ export namespace CategoriesModel {
 				return newCategory?.[0];
 			}
 			console.error("Invalid category type provided for insertion.");
-			return null;
+			return undefined;
 		} catch (error) {
 			console.error("Error inserting category:", error);
-			return null;
+			return undefined;
 		}
 	}
 
@@ -59,7 +59,7 @@ export namespace CategoriesModel {
 		categoryType: CategoryType,
 		id: string,
 		data: Partial<typeof inventoryCategorySchema.$inferInsert>,
-	): Promise<typeof inventoryCategorySchema.$inferSelect | null> {
+	): Promise<typeof inventoryCategorySchema.$inferSelect | undefined> {
 		try {
 			if (categoryType === "inventory") {
 				const updatedCategory = await db
@@ -78,10 +78,10 @@ export namespace CategoriesModel {
 				return updatedCategory?.[0];
 			}
 			console.error("Invalid category type provided for update.");
-			return null;
+			return undefined;
 		} catch (error) {
 			console.error("Error updating category:", error);
-			return null;
+			return undefined;
 		}
 	}
 }

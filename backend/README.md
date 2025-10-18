@@ -1,4 +1,4 @@
-# pos
+# backend
 
 To install dependencies:
 

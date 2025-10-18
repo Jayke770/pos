@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { envConfig } from "@/api/lib/environment";
+import { envConfig } from "@/lib/environment";
 
 type UserRole = "super_admin" | "admin" | "cashier";
 

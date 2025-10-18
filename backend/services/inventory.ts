@@ -1,5 +1,5 @@
-import { InventoryModel } from "@/api/models/inventory";
-import type { inventorySchema } from "@/api/models/schema";
+import { InventoryModel } from "@/models/inventory";
+import type { inventorySchema } from "@/models/schema";
 export interface InventoryItem {
 	name: string;
 	id: string;

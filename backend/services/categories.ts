@@ -1,6 +1,6 @@
 import { v7 as uuidV7 } from "uuid";
-import { CategoriesModel } from "@/api/models/categories";
-import type { inventoryCategorySchema } from "@/api/models/schema";
+import { CategoriesModel } from "@/models/categories";
+import type { inventoryCategorySchema } from "@/models/schema";
 
 type ICategory = typeof inventoryCategorySchema.$inferSelect;
 export type GetCategoryResponse = { data: ICategory[] };

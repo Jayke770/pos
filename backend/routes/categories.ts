@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { CategoriesService } from "@/api/services/categories";
+import { CategoriesService } from "@/services/categories";
 
 const app = new Elysia();
 
