@@ -37,8 +37,12 @@ jobs:
           
       - name: Install Encore CLI
         run: bash install.sh
-      - name: Print working directory
-        run: pwd
+
+      - name: Print working directory and list folders
+        run: |
+          pwd
+          ls -la
+
       - name: Disable telemetry
         run: /home/runner/.encore/bin/encore telemetry disable
 
