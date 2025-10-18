@@ -1,0 +1,29 @@
+{
+  "$schema": "https://encore.dev/schemas/infra.schema.json",
+  "metadata": {
+    "app_id": "pos-2cm2",
+    "env_name": "production",
+    "env_type": "production",
+    "cloud": "coolify",
+    "base_url": "http://127.0.0.1:4000"
+  },
+  "sql_servers": [
+    {
+      "host": "db.zxcapxjgcrwmfodemeoz.supabase.co:5432",
+      "databases": {
+        "pos": {
+          "username": "postgres",
+          "password": "Z7YYnS2UqgvtRhAI"
+        }
+      }
+    }
+  ],
+  "service_discovery": {
+    "pos-backend": {
+      "base_url": "http://127.0.0.1:4000"
+    }
+  },
+  "graceful_shutdown": {
+    "total": 30
+  }
+}

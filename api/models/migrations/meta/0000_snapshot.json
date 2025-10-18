@@ -1,0 +1,295 @@
+{
+	"id": "1d92f959-79e1-4c9e-acd7-b6ca58515986",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"public.inventory_categories": {
+			"name": "inventory_categories",
+			"schema": "",
+			"columns": {
+				"category": {
+					"name": "category",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"storeId": {
+					"name": "storeId",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"totalProducts": {
+					"name": "totalProducts",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": false,
+					"default": 0
+				},
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"createdAt": {
+					"name": "createdAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				},
+				"updatedAt": {
+					"name": "updatedAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"inventory_categories_category_unique": {
+					"name": "inventory_categories_category_unique",
+					"nullsNotDistinct": false,
+					"columns": ["category"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.inventory": {
+			"name": "inventory",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"unit": {
+					"name": "unit",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"categoryId": {
+					"name": "categoryId",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"cost": {
+					"name": "cost",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"stocks": {
+					"name": "stocks",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"addToPos": {
+					"name": "addToPos",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": false,
+					"default": false
+				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"createdAt": {
+					"name": "createdAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				},
+				"updatedAt": {
+					"name": "updatedAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"inventory_categoryId_inventory_categories_id_fk": {
+					"name": "inventory_categoryId_inventory_categories_id_fk",
+					"tableFrom": "inventory",
+					"tableTo": "inventory_categories",
+					"columnsFrom": ["categoryId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.product_categories": {
+			"name": "product_categories",
+			"schema": "",
+			"columns": {
+				"category": {
+					"name": "category",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"storeId": {
+					"name": "storeId",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"totalProducts": {
+					"name": "totalProducts",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": false,
+					"default": 0
+				},
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"createdAt": {
+					"name": "createdAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				},
+				"updatedAt": {
+					"name": "updatedAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"product_categories_category_unique": {
+					"name": "product_categories_category_unique",
+					"nullsNotDistinct": false,
+					"columns": ["category"]
+				}
+			},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.products": {
+			"name": "products",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true,
+					"default": "gen_random_uuid()"
+				},
+				"categoryId": {
+					"name": "categoryId",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"totalSold": {
+					"name": "totalSold",
+					"type": "numeric",
+					"primaryKey": false,
+					"notNull": false,
+					"default": 0
+				},
+				"addons": {
+					"name": "addons",
+					"type": "jsonb",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "'[]'"
+				},
+				"variants": {
+					"name": "variants",
+					"type": "jsonb",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "'[]'"
+				},
+				"createdAt": {
+					"name": "createdAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				},
+				"updatedAt": {
+					"name": "updatedAt",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"products_categoryId_product_categories_id_fk": {
+					"name": "products_categoryId_product_categories_id_fk",
+					"tableFrom": "products",
+					"tableTo": "product_categories",
+					"columnsFrom": ["categoryId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}
