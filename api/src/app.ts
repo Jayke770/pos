@@ -2,7 +2,7 @@ import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import { autoload } from "elysia-autoload";
-import { envConfig } from "@/lib/environment"
+import { envConfig } from "@/src/"
 
 const app = new Elysia()
     .use(
@@ -15,6 +15,7 @@ const app = new Elysia()
             dir: "./routes",
             prefix: "/api",
             types: {
+                useExport: true,
                 typeName: "Routes",
             },
             ignore: ["**/*.test.ts", "**/*.spec.ts"],
