@@ -1,0 +1,39 @@
+import { eq } from "drizzle-orm";
+import { db } from "@/api/models/database";
+import { inventoryCategorySchema, inventorySchema } from "@/api/models/schema";
+
+export namespace InventoryModel {
+	export async function findAllInventoryItems(): Promise<
+		(typeof inventorySchema.$inferSelect)[] | null
+	> {
+		try {
+			const items = await db.select().from(inventorySchema);
+			return items;
+		} catch (error) {
+			console.error("Error fetching inventory items:", error);
+			return null;
+		}
+	}
+	export async function insertInventoryItem(
+		data: typeof inventorySchema.$inferInsert,
+	): Promise<typeof inventorySchema.$inferSelect | undefined> {
+		try {
+			const categoryExists = await db
+				.select({ id: inventoryCategorySchema.id })
+				.from(inventoryCategorySchema)
+				.where(eq(inventoryCategorySchema.id, data.categoryId))
+				.limit(1);
+			if (!categoryExists || categoryExists.length === 0) {
+				console.error(
+					"Invalid categoryId provided for inventory item insertion.",
+				);
+				return undefined;
+			}
+			const [item] = await db.insert(inventorySchema).values(data).returning();
+			return item;
+		} catch (error) {
+			console.error("Error inserting inventory item:", error);
+			return undefined;
+		}
+	}
+}
