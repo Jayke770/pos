@@ -7,14 +7,6 @@
     "moduleResolution": "Bundler",
     "allowJs": true,
     "jsx": "preserve",
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@backend/*": ["../../apps/api/src/*"],
-      "@frontend/*": ["./src/*"],
-      "@repo/ui/*": ["../../packages/ui/src/*"],
-      "@repo/types/*": ["../../packages/types/src/*"]
-    }
+    "noEmit": true
   }
 }

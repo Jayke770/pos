@@ -1,4 +1,4 @@
-import type { BackendRoutes } from "@backend/routes-types";
+import type { BackendRoutes } from "@backend/routes-types"
 import { treaty } from "@elysiajs/eden";
 
 export const appConfig = {

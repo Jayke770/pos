@@ -14,7 +14,7 @@ node_modules
 /coverage
 
 # next.js
-/.next/
+.next
 /out/
 
 # production
@@ -45,3 +45,4 @@ encore.gen.go
 encore.gen.cue
 /.encore
 /encore.gen
+.turbo

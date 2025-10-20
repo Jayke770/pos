@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
-    "lint": "biome check --write .",
-    "format": "biome format --write"
+    "start": "next start"
   },
   "dependencies": {
     "@elysiajs/eden": "^1.4.4",
@@ -76,6 +74,7 @@
     "zustand-debounce": "^2.2.0"
   },
   "devDependencies": {
+    "@repo/typescript-config": "*",
     "@biomejs/biome": "2.2.6",
     "@tailwindcss/postcss": "^4",
     "@types/jsonwebtoken": "^9.0.10",
