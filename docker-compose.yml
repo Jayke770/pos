@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      # Add your other environment variables here
+      # - DATABASE_URL=your_database_url
+      # - JWT_SECRET=your_jwt_secret
+    volumes:
+      # Uncomment if you need to persist data
+      # - ./data:/usr/src/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Uncomment if you need a database
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: pos_db
+  #     POSTGRES_USER: pos_user
+  #     POSTGRES_PASSWORD: pos_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+
+# volumes:
+#   postgres_data:
