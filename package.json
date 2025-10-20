@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "server:dev": "bun run --watch api/app.ts"
+    "server:dev": "bun run --watch api/app.ts",
+    "server:start": "bun run api/app.ts"
   },
   "dependencies": {
     "@elysiajs/eden": "^1.4.4",
