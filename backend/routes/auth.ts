@@ -32,6 +32,7 @@ const app = new Elysia()
 					httpOnly: true,
 					secure: envConfig.NODE_ENV === "production",
 					sameSite: "lax",
+					domain: envConfig.NODE_ENV === "production" ? envConfig.COOKIE_DOMAIN : undefined,
 					path: "/",
 				});
 			}
