@@ -13,5 +13,6 @@ const EnvSchema = z.object({
 		.string()
 		.refine((val) => val.split(","))
 		.default("http://localhost:3000"),
+	COOKIE_DOMAIN: z.string().optional(),
 });
 export const envConfig = EnvSchema.parse(process.env);
