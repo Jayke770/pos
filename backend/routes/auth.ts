@@ -32,6 +32,7 @@ const app = new Elysia()
 					httpOnly: true,
 					secure: envConfig.NODE_ENV === "production",
 					sameSite: "lax",
+					expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
 					domain: envConfig.NODE_ENV === "production" ? envConfig.COOKIE_DOMAIN : undefined,
 					path: "/",
 				});
