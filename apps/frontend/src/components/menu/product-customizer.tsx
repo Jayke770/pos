@@ -180,7 +180,6 @@ export function ProductCustomizer({
 								Special Instructions
 							</Label>
 							<Textarea
-								id="notes"
 								placeholder="Any special requests or notes..."
 								value={notes}
 								onChange={(e) => setNotes(e.target.value)}
