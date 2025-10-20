@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -10,7 +11,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-	Form,	
+	Form,
 	FormControl,
 	FormField,
 	FormItem,
@@ -26,6 +27,7 @@ const LoginFormSchema = z.object({
 	password: z.string().min(1, { message: "Password is required" }),
 });
 export default function AuthForm() {
+	const router = useRouter();
 	const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false);
 	const loginForm = useForm<z.infer<typeof LoginFormSchema>>({
 		resolver: zodResolver(LoginFormSchema),
@@ -46,7 +48,10 @@ export default function AuthForm() {
 				onToggleIsSubmitting();
 				return e.message;
 			},
-			success: "Redirecting....",
+			success: () => {
+				router.push("/dashboard")
+				return "Redirecting....";
+			},
 		});
 	};
 	return (
