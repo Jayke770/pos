@@ -69,12 +69,11 @@
     "uuid": "^13.0.0",
     "vaul": "^1.1.2",
     "zod": "^3.25.51",
-    "elysia": "^1.4.12",
     "zustand": "^5.0.5",
     "zustand-debounce": "^2.2.0"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "elysia": "^1.4.12",
     "@biomejs/biome": "2.2.6",
     "@repo/typescript-config": "*",
     "@tailwindcss/postcss": "^4",
