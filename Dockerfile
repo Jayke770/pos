@@ -11,7 +11,7 @@ COPY package.json bun.lockb* ./
 RUN bun install --frozen-lockfile
 
 # Copy the api folder and other necessary files
-COPY api/ ./api/
+COPY backend/ ./backend/
 COPY drizzle.config.ts ./
 
 # Create a non-root user
@@ -23,13 +23,6 @@ RUN chown -R bunuser:nodejs /usr/src/app
 
 # Switch to non-root user
 USER bunuser
-
-# Expose the port the app runs on (adjust if different)
-EXPOSE 3001
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3001/ || exit 1
 
 # Run the server:start command
 CMD ["bun", "run", "server:start"]
