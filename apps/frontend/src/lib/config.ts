@@ -9,6 +9,8 @@ export const backendHandler = treaty<BackendRoutes>(
 	process.env.NEXT_PUBLIC_API_URL || "",
 	{ fetch: { credentials: "include" } },
 );
+
+
 export const itemTypes = [
 	{
 		id: "ingredient",
