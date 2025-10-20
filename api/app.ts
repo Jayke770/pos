@@ -8,7 +8,7 @@ new Elysia()
 	.use(
 		cors({
 			origin: envConfig.ORIGINS,
-		}),
+		})
 	)
 	.use(
 		await autoload({

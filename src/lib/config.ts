@@ -1,5 +1,5 @@
-import type { BackendRoutes } from "@backend/routes-types"
 import { treaty } from "@elysiajs/eden";
+import type { BackendRoutes } from "@/api/routes-types";
 
 export const appConfig = {
 	appName: "Freetoh",
