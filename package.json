@@ -12,6 +12,12 @@
     "server:start": "bun run ./backend/app.ts"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/ios": "^7.4.4",
+    "@capawesome/capacitor-android-edge-to-edge-support": "^7.2.3",
+    "@capawesome/capacitor-background-task": "^7.0.1",
     "@elysiajs/cors": "^1.4.0",
     "@elysiajs/eden": "^1.4.4",
     "@elysiajs/jwt": "^1.4.0",
@@ -88,6 +94,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
+    "@ionic/remote-log": "^0.0.2",
     "@tailwindcss/postcss": "^4",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",

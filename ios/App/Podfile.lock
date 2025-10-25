@@ -1,0 +1,28 @@
+PODS:
+  - Capacitor (7.4.4):
+    - CapacitorCordova
+  - CapacitorCordova (7.4.4)
+  - CapawesomeCapacitorBackgroundTask (7.0.1):
+    - Capacitor
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapawesomeCapacitorBackgroundTask (from `../../node_modules/@capawesome/capacitor-background-task`)"
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapawesomeCapacitorBackgroundTask:
+    :path: "../../node_modules/@capawesome/capacitor-background-task"
+
+SPEC CHECKSUMS:
+  Capacitor: 358dd1c3fdd71d969547b17e159fd8a7736cb45f
+  CapacitorCordova: bf648a636f3c153f652d312ae145fb508b6ffced
+  CapawesomeCapacitorBackgroundTask: e17ea2608e9bdd14889d8eba2d793ff9c337db6c
+
+PODFILE CHECKSUM: ffc1e12f41693cb3077234bfb17c5daf91003555
+
+COCOAPODS: 1.16.2
