@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
 		unoptimized: true,
 		remotePatterns: [{ protocol: "https", hostname: "*" }],
 	},
-	output: "export",
+	output: "export", 
 	assetPrefix: isProd ? undefined : `http://${internalHost}:3000`,
 }
 export default withSerwist(nextConfig);

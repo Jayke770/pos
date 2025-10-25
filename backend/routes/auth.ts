@@ -26,6 +26,7 @@ const app = new Elysia()
 		"/login",
 		async ({ body, cookie: { token } }) => {
 			const result = await AuthService.login(body);
+			console.log(result);
 			if (result.token) {
 				token?.set({
 					value: result.token,
