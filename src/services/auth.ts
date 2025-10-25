@@ -9,7 +9,7 @@ export namespace ClientAuthService {
 		)?.value;
 		const userData = await backendHandler.api.auth.me.get({
 			fetch: {
-				credentials: "include",
+				credentials: "include", 
 				headers: {
 					Cookie: `token=${authToken}`,
 				},
