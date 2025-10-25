@@ -8,11 +8,10 @@ const EnvSchema = z.object({
 	SUPER_ADMIN_USERNAME: z.string().default("master"),
 	SUPER_ADMIN_PASSWORD: z.string().default("master"),
 	JWT_SECRET: z.string().default("key"),
-	DATABASE_URL: z.string().url(),
+	DATABASE_URL: z.url(),
 	ORIGINS: z
 		.string()
-		.refine((val) => val.split(","))
-		.default("http://localhost:3000"),
+		.transform((val) => val.split(",")),
 	COOKIE_DOMAIN: z.string().optional(),
 });
 export const envConfig = EnvSchema.parse(process.env);

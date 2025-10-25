@@ -9,7 +9,8 @@ import {
 	Settings,
 	ShoppingCart,
 	TrendingUp,
-	Users,
+	Users, 
+	ShoppingBag
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -35,6 +36,11 @@ const menuItems = [
 		title: "Dashboard",
 		url: "/dashboard",
 		icon: BarChart3,
+	},
+	{
+		title: "POS",
+		url: "/home",
+		icon: ShoppingBag,
 	},
 	{
 		title: "Orders",
