@@ -1,4 +1,5 @@
 import { envConfig } from "@/api/lib/environment";
+import { status } from "elysia";
 import jwt from "jsonwebtoken";
 
 type UserRole = "super_admin" | "admin" | "cashier";
@@ -19,18 +20,19 @@ export interface LoginResponse {
 }
 
 export namespace AuthService {
-	export async function getUser(token: string): Promise<AuthUserData | null> {
+	export async function getUser(token?: string) {
 		try {
 			console.info("Verifying token:", token);
+			if (!token) return status(401, { message: "No token provided" });
 			const data = jwt.verify(token, envConfig.JWT_SECRET) as AuthUserData;
 			console.info("Authenticated user:", data.username);
-			return data;
+			return status(200, data);
 		} catch (e) {
 			console.error("Authentication failed:", e);
 			if (e instanceof jwt.TokenExpiredError) {
-				throw new Error("Token expired");
+				return status(401, { message: "Token expired" });
 			}
-			throw new Error("Invalid token");
+			return status(401, { message: "Invalid token" });
 		}
 	}
 	export async function login(params: LoginParams): Promise<LoginResponse> {

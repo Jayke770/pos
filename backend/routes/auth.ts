@@ -5,7 +5,7 @@ import { AuthService } from "@/api/services/auth";
 const app = new Elysia()
 	.get("/me", ({ cookie }) => AuthService.getUser(cookie.token.value), {
 		cookie: t.Object({
-			token: t.String(),
+			token: t.Optional(t.String()),
 		}),
 		tags: ["Authentication"],
 		response: {
@@ -19,7 +19,7 @@ const app = new Elysia()
 					t.Literal("cashier"),
 				]),
 			}),
-			401: t.Null(),
+			401: t.Object({ message: t.String() }),
 		},
 	})
 	.post(

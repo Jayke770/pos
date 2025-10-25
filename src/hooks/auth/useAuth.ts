@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { backendHandler } from "@/lib/config";
 import { Treaty } from "@elysiajs/eden";
 export function useAuthentication(): {
-    user?: Treaty.Data<typeof backendHandler.api.auth.me.get>;
+    user: Treaty.Data<typeof backendHandler.api.auth.me.get> | null;
     userLoading: boolean;
     userError: boolean;
     mutate: () => void;
@@ -25,7 +25,7 @@ export function useAuthentication(): {
     );
     return {
         mutate,
-        user: data as Treaty.Data<typeof backendHandler.api.auth.me.get> | undefined,
+        user: data?.data || null,
         userLoading: isLoading,
         userError: error,
     };

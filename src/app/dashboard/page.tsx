@@ -15,7 +15,7 @@ export default function DashboardPage() {
 		if (!userLoading && !user) {
 			router.push("/");
 		}
-	}, [user]);
+	}, [user, userLoading]);
 	return (
 		<>
 			{(userLoading || !user) && <Loading />}
