@@ -1,10 +1,16 @@
 import type { NextConfig } from "next";
+import withSerwistInit from "@serwist/next";
 
+const withSerwist = withSerwistInit({
+	reloadOnOnline: true,
+	swSrc: "src/app/sw.ts",
+	swDest: "public/sw.js",
+});
 const nextConfig: NextConfig = {
-	allowedDevOrigins: ["127.0.0.1"],
 	images: {
+		unoptimized: true,
 		remotePatterns: [{ protocol: "https", hostname: "*" }],
-	}
-};
-
-export default nextConfig;
+	},
+	output: "export"
+}
+export default withSerwist(nextConfig);

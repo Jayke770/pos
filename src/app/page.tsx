@@ -1,10 +1,22 @@
-import { redirect } from "next/navigation";
-import { ClientAuthService } from "@/services/auth";
+"use client";
 import AuthForm from "./main";
-export default async function Page() {
-	const userData = await ClientAuthService.getUser();
-	if (userData) {
-		redirect("/dashboard");
-	}
-	return <AuthForm />;
+import { useAuthentication } from '@/hooks/auth/useAuth'
+import Loading from "@/components/loading";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+export default function Page() {
+	const router = useRouter()
+	const { user, userLoading } = useAuthentication();
+	useEffect(() => {
+		if (user) {
+			router.push("/dashboard")
+		}
+	}, [user])
+	return (
+		<>
+			{(userLoading || user) && <Loading />}
+			{!userLoading && !user && <AuthForm />}
+		</>
+	)
+
 }

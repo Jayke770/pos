@@ -2,7 +2,10 @@ import { treaty } from "@elysiajs/eden";
 import type { BackendRoutes } from "@/api/routes-types";
 
 export const appConfig = {
-	appName: "Freetoh",
+	appName: "Freetoh", 
+	appDefaultTitle: "Freetoh - POS System",
+	appTitleTemplate: "%s - Freetoh",
+	appDescription: "Freetoh",
 };
 export const backendHandler = treaty<BackendRoutes>(
 	process.env.NEXT_PUBLIC_API_URL || "",
